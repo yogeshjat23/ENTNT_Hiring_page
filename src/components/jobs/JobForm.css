@@ -1,9 +1,81 @@
-.job-form .form-group { margin-bottom: 1.5rem; }
-.job-form label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-.job-form input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; box-sizing: border-box; }
-.job-form .form-actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; }
-.job-form button { padding: 10px 20px; border-radius: 4px; border: none; font-size: 16px; font-weight: 500; cursor: pointer; }
-.job-form .btn-cancel { background-color: #f1f1f1; }
-.job-form .btn-submit { background-color: #007bff; color: white; }
-.job-form .btn-submit:hover { background-color: #0056b3; }
-.job-form .btn-submit:disabled { background-color: #a0caff; cursor: not-allowed; }
+/* === MODERN THEMED JOB FORM === */
+
+.job-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.job-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.job-form input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  box-sizing: border-box;
+}
+
+.job-form input:focus {
+  outline: none;
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-accent) 30%, transparent);
+}
+
+.job-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Base styles for form buttons */
+.job-form button {
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Cancel Button */
+.job-form .btn-cancel {
+  background-color: var(--surface-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+.job-form .btn-cancel:hover {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+}
+
+/* Submit Button */
+.job-form .btn-submit {
+  background-color: var(--primary-accent);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+.job-form .btn-submit:hover {
+  background-color: var(--primary-accent-hover);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+.job-form .btn-submit:disabled {
+  background-color: color-mix(in srgb, var(--primary-accent) 50%, var(--surface-secondary));
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

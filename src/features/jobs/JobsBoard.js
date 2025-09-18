@@ -36,6 +36,16 @@ const updateJob = async (jobData) => {
     return res.json();
 };
 
+const toggleJobStatus = async ({ id, status }) => {
+    const res = await fetch(`/jobs/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+    });
+    if (!res.ok) throw new Error('Failed to update job status');
+    return res.json();
+};
+
 const reorderJobs = async (reorderData) => {
     const res = await fetch(`/jobs/some-id/reorder`, {
         method: 'PATCH',
@@ -76,7 +86,11 @@ const JobsBoard = () => {
     };
     const createMutation = useMutation({ mutationFn: createJob, ...mutationOptions });
     const updateMutation = useMutation({ mutationFn: updateJob, ...mutationOptions });
-   
+    const archiveMutation = useMutation({
+        mutationFn: toggleJobStatus,
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }),
+        onError: (error) => alert(error.message),
+    });
     const reorderMutation = useMutation({
         mutationFn: reorderJobs,
         onMutate: async (newOrder) => {
