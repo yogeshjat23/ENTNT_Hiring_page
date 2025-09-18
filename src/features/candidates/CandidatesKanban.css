@@ -101,7 +101,7 @@
     padding: 10px 15px;
     margin: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    border-left: 4px solid #007bff;
+    border-left: 4px solid var(--warning-color);
 }
 
 .candidate-card h4 {
@@ -136,7 +136,8 @@
 /* Style for cards within the "Hired" column */ 
 .kanban-column[data-stage="applied"] .candidate-card {
   border-left-color: gray;
-}
+} 
+
 .kanban-column[data-stage="hired"] .candidate-card {
   border-left-color: var(--status-active);
 }
