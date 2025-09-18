@@ -3,17 +3,18 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { Link } from 'react-router-dom';
 import VirtualizedCandidateList from './VirtualizedCandidateList';
+import NotesModal from './NotesModal';
 import './CandidatesKanban.css';
 
 const STAGES = ['applied', 'screen', 'tech', 'offer', 'hired', 'rejected'];
 
 // Mock API call functions
 const fetchCandidates = async () => (await fetch('/candidates')).json();
-const moveCandidate = async ({ id, stage }) => {
+const moveCandidate = async ({ id, stage, notes }) => {
     const res = await fetch(`/candidates/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stage }),
+        body: JSON.stringify({ stage, notes }), // Pass notes in the body
     });
     if (!res.ok) throw new Error('Failed to move candidate');
     return res.json();
@@ -29,7 +30,7 @@ const CandidatesKanban = () => {
         queryFn: fetchCandidates,
     });
 
-    const moveMutation = useMutation({
+   const moveMutation = useMutation({
         mutationFn: moveCandidate,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['candidates'] }),
     });
@@ -60,15 +61,39 @@ const CandidatesKanban = () => {
     
     const onDragEnd = (result) => {
         const { source, destination, draggableId } = result;
-        if (!destination || (source.droppableId === destination.droppableId)) return;
-        
-        moveMutation.mutate({ id: draggableId, stage: destination.droppableId });
+        if (!destination || (source.droppableId === destination.droppableId)) {
+            return;
+        }
+
+        const candidate = candidates.find(c => c.id === draggableId);
+        if (!candidate) return;
+
+        // This is the function the modal will call when "Save" is clicked
+        const handleConfirm = (notesFromModal) => {
+            moveMutation.mutate({
+                id: draggableId,
+                stage: destination.droppableId,
+                notes: notesFromModal, // Pass the notes to the mutation
+            });
+        };
+
+        // Create and dispatch the custom event to open the modal
+        const event = new CustomEvent('openNotesModal', {
+            detail: {
+                meta: { name: candidate.name }, // Pass candidate's name to the modal
+                onConfirm: handleConfirm, // Pass the confirm handler
+            }
+        });
+        window.dispatchEvent(event);
     };
+
+
 
     if (isLoading) return <div>Loading candidates...</div>;
 
     return (
         <div className="kanban-board">
+          <NotesModal/> 
             <div className="kanban-header">
                 <h2>Candidates Pipeline</h2>
                 <div className="view-controls">

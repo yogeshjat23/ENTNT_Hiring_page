@@ -1,52 +1,129 @@
-.notes-modal-content {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+/* === MODERN THEMED NOTES MODAL === */
+
+.notes-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(10, 10, 10, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
 }
-.notes-modal-content textarea {
-    width: 100%;
-    padding: 10px;
-    background-color: var(--surface-secondary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    resize: vertical;
-    box-sizing: border-box;
+
+.notes-modal {
+  /* Glassmorphism Effect */
+  background: var(--surface-primary);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  
+  width: 90%;
+  max-width: 500px;
+  padding: 2rem;
+  
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  
+  animation: modal-fade-in 0.3s ease-out;
+  color: var(--text-primary);
 }
+
+@keyframes modal-fade-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.notes-modal h3 {
+  margin: 0;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 1.5rem;
+}
+
+.notes-modal textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  resize: vertical;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.notes-modal textarea:focus {
+  outline: none;
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-accent) 30%, transparent);
+}
+
 .mention-suggestions {
-    background-color: var(--surface-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    padding: 0.5rem;
-    font-size: 0.9rem;
+  background-color: var(--surface-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
 }
-.mention-suggestions span {
-    display: inline-block;
-    background-color: var(--primary-accent);
-    color: white;
-    padding: 2px 8px;
-    margin: 4px;
-    border-radius: 4px;
+
+.mention-item {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
-.notes-modal-content .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1rem;
+.mention-item:hover {
+  background-color: var(--primary-accent);
+  color: white;
 }
-.notes-modal-content button {
+
+.notes-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.notes-actions button {
   padding: 10px 20px;
   border-radius: var(--border-radius);
   border: none;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
-.notes-modal-content .btn-cancel {
+
+.notes-actions button:first-child { /* Cancel Button */
   background-color: var(--surface-secondary);
   color: var(--text-secondary);
+  border: 1px solid var(--border-color);
 }
-.notes-modal-content .btn-submit {
+.notes-actions button:first-child:hover {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+}
+
+.notes-actions button:last-child { /* Save Button */
   background-color: var(--primary-accent);
   color: white;
+  box-shadow: var(--shadow-md);
+}
+.notes-actions button:last-child:hover {
+  background-color: var(--primary-accent-hover);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }

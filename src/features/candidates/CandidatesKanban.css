@@ -114,6 +114,13 @@
     font-size: 14px;
     color: #6c757d;
 }
+  
+
+.kanban-column[data-stage="applied"] {
+  background-color: white;
+  border-left: 3px solid gray;
+}
+
 
 .kanban-column[data-stage="hired"] {
   background-color: color-mix(in srgb, var(--status-active) 10%, var(--surface-primary));
@@ -126,7 +133,10 @@
   border-left: 3px solid var(--danger-color);
 }
 
-/* Style for cards within the "Hired" column */
+/* Style for cards within the "Hired" column */ 
+.kanban-column[data-stage="applied"] .candidate-card {
+  border-left-color: gray;
+}
 .kanban-column[data-stage="hired"] .candidate-card {
   border-left-color: var(--status-active);
 }
@@ -144,13 +154,13 @@
     font-weight: 600;
 } 
 
-.kanban-column:not([data-stage="hired"]):not([data-stage="rejected"]) { 
+.kanban-column:not([data-stage="hired"]):not([data-stage="rejected"]):not([data-stage="applied"]) { 
    
   border-left: 3px solid var(--warning-color);
   background-color: color-mix(in srgb, var(--warning-color) 10%, var(--surface-primary));
 }
 
 /* Style for cards within those columns */
-.kanban-column:not([data-stage="hired"]):not([data-stage="rejected"]) .candidate-card {
+.kanban-column:not([data-stage="hired"]):not([data-stage="rejected"]):not([data-stage="applied"]).candidate-card {
   border-left-color: var(--warning-color);
 }
