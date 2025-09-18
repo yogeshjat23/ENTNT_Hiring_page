@@ -1,0 +1,418 @@
+/* === MODERN THEME WITH ANIMATED BACKGROUNDS & LIGHT/DARK MODES === */
+
+/* 1. Theme Variables */
+:root {
+  /* NEW & IMPROVED DARK MODE (DEFAULT) */
+  --background-primary: #0D1117;
+  /* Deeper, near-black background */
+  --surface-primary: rgba(22, 27, 34, 0.75);
+  /* Darker, higher contrast cards */
+  --surface-secondary: rgba(30, 36, 44, 0.8);
+  /* Subtle hover for cards */
+  --border-color: rgba(48, 54, 61, 0.8);
+  /* A slightly lighter border */
+
+  --primary-accent: #8B5CF6;
+  /* A more vibrant, modern purple */
+  --primary-accent-hover: #7C3AED;
+
+  --text-primary: #ffffff;
+  /* A slightly softer white */
+  --text-secondary: #ffffff;
+  /* Muted grey for secondary text */
+
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --danger-color: #F77272;
+  /* A slightly brighter red */
+  --status-active: #34D399;
+  /* A vibrant green */
+  --status-archived: #FB923C;
+  /* A vibrant orange */
+  --text-accent: var(--primary-accent);
+}
+
+.light-mode {
+  /* LIGHT MODE (Unchanged) */
+  --background-primary: #F3F4F6;
+  --surface-primary: rgba(255, 255, 255, 0.7);
+  --surface-secondary: #F9FAFB;
+  --border-color: rgba(229, 231, 235, 0.8);
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Base variables that use the theme */
+:root {
+  --shadow-sm: 0 1px 2px 0 var(--shadow-color);
+  --shadow-md: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
+  --shadow-lg: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -4px var(--shadow-color);
+  --border-radius: 0.5rem;
+  /* 8px */
+}
+
+
+/* 2. Global & Layout Styles */
+@keyframes background-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+body {
+  /* Default dark mode animated background */
+  background-color: #0c0a18;
+  background-image: radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 74% 94%, hsla(333, 98%, 62%, 0.1) 0px, transparent 50%);
+  background-size: 200% 200%;
+  animation: background-pan 20s ease-in-out infinite;
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.light-mode body {
+  /* Light mode animated background override */
+  background-color: #f0f2ff;
+  background-image: radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 74% 94%, hsla(333, 98%, 62%, 0.1) 0px, transparent 50%);
+}
+
+.jobs-board {
+  max-width: 900px;
+  margin: auto;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  perspective: 1000px;
+  /* For 3D transforms */
+}
+
+.board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+}
+
+.board-header h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: black;
+}
+
+
+/* 3. Filter Input */
+.filter-input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+
+  background-color: var(--surface-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-accent) 30%, transparent);
+}
+
+
+/* 4. Collapsible Sections */
+.jobs-section {
+  margin-top: 2.5rem;
+}
+
+.jobs-section-header.collapsible {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  transition: background-color 0.2s;
+  background-color: var(--surface-primary);
+  box-shadow: var(--shadow-md);
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+}
+
+.jobs-section-header.collapsible:hover {
+  background-color: var(--surface-secondary);
+}
+
+.jobs-section-header.collapsible h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.chevron {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  transform: rotate(0deg);
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+
+/* 5. Job List & Items */
+.jobs-list {
+  padding-top: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background-color: transparent;
+}
+
+@keyframes fadeInSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.job-item {
+  position: relative;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  background-color: var(--surface-primary);
+  border: 1px solid var(--border-color);
+  border-left-width: 5px;
+  /* Status indicator */
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.1s linear;
+  will-change: transform;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  animation: fadeInSlideUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.jobs-list>* {
+  --delay: calc((var(--i, 0) + 1) * 50ms);
+  animation-delay: var(--delay);
+}
+
+.job-item .job-item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: translateZ(20px);
+  /* Lifts content in 3D space */
+}
+
+/* Glare effect for 3D card */
+.job-item::before {
+  content: "";
+  position: absolute;
+  top: var(--mouse-y, 0);
+  left: var(--mouse-x, 0);
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.2), transparent 80%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.job-item:hover::before {
+  opacity: 1;
+}
+
+.job-item.active {
+  border-left-color: var(--status-active);
+}
+
+.job-item.archived {
+  border-left-color: var(--status-archived);
+  background-color: color-mix(in srgb, var(--surface-primary) 50%, var(--background-primary));
+}
+
+.job-item.archived .job-title {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
+.job-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+
+/* 6. Buttons & Actions (Pill Design) */
+.job-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Base style for all action buttons */
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 9999px;
+  /* Pill shape */
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+}
+
+/* Modifier for the 'Edit' button */
+.action-btn.edit {
+  background-color: color-mix(in srgb, var(--primary-accent) 15%, transparent);
+  color: var(--primary-accent);
+}
+
+/* Modifier for the 'Archive' button */
+.action-btn.archive {
+  background-color: color-mix(in srgb, var(--danger-color) 15%, transparent);
+  color: var(--danger-color);
+}
+
+/* Modifier for the 'Unarchive' button */
+.action-btn.unarchive {
+  background-color: color-mix(in srgb, var(--status-active) 15%, transparent);
+  color: var(--status-active);
+}
+
+/* Hover effect for all action buttons */
+.action-btn:hover {
+  transform: translateY(-2px);
+}
+
+.action-btn.edit:hover {
+  background-color: var(--primary-accent);
+  color: white;
+  box-shadow: 0 0 15px 0 color-mix(in srgb, var(--primary-accent) 50%, transparent);
+}
+
+.action-btn.archive:hover {
+  background-color: var(--danger-color);
+  color: white;
+  box-shadow: 0 0 15px 0 color-mix(in srgb, var(--danger-color) 50%, transparent);
+}
+
+.action-btn.unarchive:hover {
+  background-color: var(--status-active);
+  color: white;
+  box-shadow: 0 0 15px 0 color-mix(in srgb, var(--status-active) 50%, transparent);
+}
+
+.create-job-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--primary-accent);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+}
+
+.create-job-btn:hover {
+  background-color: var(--primary-accent-hover);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+
+/* 7. Theme Toggle Button */
+.theme-toggle {
+  /* The position, top, right, and z-index properties have been removed */
+  background-color: var(--surface-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  cursor: pointer;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  
+  /* Add a little margin to space it from the other links */
+  margin-left: 1rem; 
+}
+
+.theme-toggle:hover {
+  border-color: var(--primary-accent);
+}
+
+.theme-toggle .icon {
+  position: absolute;
+  font-size: 1.5rem;
+  transition: transform 0.4s cubic-bezier(0.445, 0.050, 0.550, 0.950),
+    opacity 0.3s ease;
+}
+
+.theme-toggle .sun {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.light-mode .theme-toggle .sun {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.theme-toggle .moon {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.light-mode .theme-toggle .moon {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+input::placeholder {
+  font-weight: bold;
+  opacity: 0.8;
+  color: var(--text-primary);
+}  
+ 

@@ -1,0 +1,9 @@
+.job-form .form-group { margin-bottom: 1.5rem; }
+.job-form label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+.job-form input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; box-sizing: border-box; }
+.job-form .form-actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; }
+.job-form button { padding: 10px 20px; border-radius: 4px; border: none; font-size: 16px; font-weight: 500; cursor: pointer; }
+.job-form .btn-cancel { background-color: #f1f1f1; }
+.job-form .btn-submit { background-color: #007bff; color: white; }
+.job-form .btn-submit:hover { background-color: #0056b3; }
+.job-form .btn-submit:disabled { background-color: #a0caff; cursor: not-allowed; }

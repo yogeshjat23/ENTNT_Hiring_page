@@ -1,38 +1,91 @@
-.App {
-  text-align: center;
+/* Add some basic styling for layout, fonts, etc. */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f4f7fa;
+    color: #333;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+/* === MODERN NAVIGATION BAR STYLES === */
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+nav {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 1rem 2rem;
+  
+  /* Glassmorphism Effect */
+  background-color: var(--surface-primary);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-bottom: 1px solid var(--border-color);
+
+  position: sticky; /* Makes the nav bar stay at the top on scroll */
+  top: 0;
+  z-index: 1000;
+  
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.App-link {
-  color: #61dafb;
+nav h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-right: auto; /* Pushes other links to the right */
+  transition: color 0.3s ease;
 }
 
-@keyframes App-logo-spin {
+nav a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem; /* 8px */
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Hover effect */
+nav a:hover {
+  color: var(--text-primary);
+  background-color: var(--surface-secondary);
+}
+
+/* Style for the currently active link */
+nav a.active {
+  color: var(--primary-accent);
+  background-color: color-mix(in srgb, var(--primary-accent) 15%, transparent);
+}
+
+/* Optional: Subtle animated underline for the active link */
+nav a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-accent);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
   from {
-    transform: rotate(0deg);
+    transform: translateX(-100%);
   }
   to {
-    transform: rotate(360deg);
+    transform: translateX(0);
   }
 }
+
+main {
+    padding: 2rem;
+    flex-grow: 1;
+}
+
+/* Add other global styles for buttons, modals, etc. */
