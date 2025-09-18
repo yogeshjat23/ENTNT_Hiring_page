@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { Link, Outlet } from 'react-router-dom';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useJobModalStore } from '../../store/useJobModalStore';
 import Modal from '../../components/common/Modal';
 import JobForm from '../../components/jobs/JobForm';
 import JobItemCard from '../../components/jobs/JobItemCard';
+import Pagination from '../../components/common/Pagination';
 import './JobsBoard.css';
 
 // --- API Call Functions ---
-const fetchJobs = async (titleFilter, tagFilter) => {
-    const res = await fetch(`/jobs?search=${titleFilter}&tagSearch=${tagFilter}`);
+const fetchJobs = async (titleFilter, tagFilter, currentPage) => {
+    const res = await fetch(`/jobs?search=${titleFilter}&tagSearch=${tagFilter}&page=${currentPage}`);
     if (!res.ok) throw new Error('Network response was not ok');
     return res.json();
 };
@@ -64,14 +66,20 @@ const JobsBoard = () => {
     const debouncedTitleFilter = useDebounce(titleFilter, 300);
     const debouncedTagFilter = useDebounce(tagFilter, 300);
 
-    const { isOpen, jobToEdit, openModal, closeModal } = useJobModalStore();
+    const { openModal } = useJobModalStore();
     const [openSection, setOpenSection] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const { data: jobs = [], isLoading, isError } = useQuery({
-        queryKey: ['jobs', debouncedTitleFilter, debouncedTagFilter],
-        queryFn: () => fetchJobs(debouncedTitleFilter, debouncedTagFilter),
+        queryKey: ['jobs', debouncedTitleFilter, debouncedTagFilter, currentPage],
+        queryFn: () => fetchJobs(debouncedTitleFilter, debouncedTagFilter, currentPage),
         keepPreviousData: true,
     });
+
+    
+    const totalJobs = 0;
+    const pageSize = 8;
+    const totalPages = Math.ceil(totalJobs / pageSize);
 
     const toggleSection = (section) => {
         setOpenSection(prev => (prev === section ? null : section));
@@ -80,7 +88,7 @@ const JobsBoard = () => {
     const mutationOptions = {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['jobs'] });
-            closeModal();
+            useJobModalStore.getState().closeModal();
         },
         onError: (error) => alert(error.message || 'An error occurred'),
     };
@@ -94,22 +102,24 @@ const JobsBoard = () => {
     const reorderMutation = useMutation({
         mutationFn: reorderJobs,
         onMutate: async (newOrder) => {
-            await queryClient.cancelQueries({ queryKey: ['jobs', debouncedTitleFilter, debouncedTagFilter] });
-            const previousJobs = queryClient.getQueryData(['jobs', debouncedTitleFilter, debouncedTagFilter]) || [];
-            const previousActiveJobs = previousJobs.filter(job => job.status === 'active');
-            const previousArchivedJobs = previousJobs.filter(job => job.status === 'archived');
+            const queryKey = ['jobs', debouncedTitleFilter, debouncedTagFilter, currentPage];
+            await queryClient.cancelQueries({ queryKey });
+            const previousData = queryClient.getQueryData(queryKey) || { jobs: [], totalCount: 0 };
+            const previousActiveJobs = previousData.jobs.filter(job => job.status === 'active');
+            const previousArchivedJobs = previousData.jobs.filter(job => job.status === 'archived');
             const reorderedActiveJobs = [...previousActiveJobs];
             const [movedJob] = reorderedActiveJobs.splice(newOrder.fromOrder, 1);
             reorderedActiveJobs.splice(newOrder.toOrder, 0, movedJob);
             const newFullList = [...reorderedActiveJobs, ...previousArchivedJobs];
-            queryClient.setQueryData(['jobs', debouncedTitleFilter, debouncedTagFilter], newFullList);
-            return { previousJobs };
+            queryClient.setQueryData(queryKey, { ...previousData, jobs: newFullList });
+            return { previousData };
         },
         onError: (err, newOrder, context) => {
-            queryClient.setQueryData(['jobs', debouncedTitleFilter, debouncedTagFilter], context.previousJobs || []);
+            const queryKey = ['jobs', debouncedTitleFilter, debouncedTagFilter, currentPage];
+            queryClient.setQueryData(queryKey, context.previousData);
             alert('Failed to reorder jobs. Changes have been rolled back.');
         },
-        onSettled: () => queryClient.invalidateQueries({ queryKey: ['jobs', debouncedTitleFilter, debouncedTagFilter] }),
+        onSettled: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }),
     });
 
     const onDragEnd = (result) => {
@@ -117,25 +127,29 @@ const JobsBoard = () => {
         reorderMutation.mutate({ fromOrder: result.source.index, toOrder: result.destination.index });
     };
 
-    const handleFormSubmit = (jobData) => {
-        if (jobToEdit) {
-            updateMutation.mutate({ ...jobData, id: jobToEdit.id });
-        } else {
-            createMutation.mutate(jobData);
-        }
+    const handleOpenModal = (job = null) => {
+        const handleSubmit = (jobData) => {
+            if (job) {
+                updateMutation.mutate({ ...jobData, id: job.id });
+            } else {
+                createMutation.mutate(jobData);
+            }
+        };
+        openModal(job, handleSubmit);
     };
 
     const activeJobs = jobs.filter(job => job.status === 'active');
     const archivedJobs = jobs.filter(job => job.status === 'archived');
 
     return (
+        
         <div className="jobs-board">
             <div className="board-header">
                 <h2>Jobs Board</h2>
-                <button onClick={() => openModal()} className="create-job-btn">
+                <button onClick={() => handleOpenModal()} className="create-job-btn">
                     + <span>Create Job</span>
                 </button>
-            </div>
+            </div> 
             
             <div className="filters-container">
                 <input
@@ -173,20 +187,21 @@ const JobsBoard = () => {
                                             <Draggable key={job.id} draggableId={job.id} index={index}>
                                                 {(provided, snapshot) => (
                                                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                        <JobItemCard job={job} index={index} isDragging={snapshot.isDragging}>
-                                                            <h3 className="job-title">{job.title}</h3>
-                                                            <div className="job-deadline">
-                                                                <span>✔️</span>
-                                                                <span>Deadline: November 2, 2025</span>
-                                                            </div>
-                                                            <div className="job-location">
-                                                                <span>📍</span>
-                                                                <span>{job.tags.join(' / ')}</span>
-                                                            </div>
-                                                            <a href="#" className="job-apply-link">
-                                                                Apply now →
-                                                            </a>
-                                                        </JobItemCard>
+                                                        <Link to={`/jobs/${job.id}`} className="job-card-link">
+                                                            <JobItemCard job={job} index={index} isDragging={snapshot.isDragging}>
+                                                                <div className="job-card-main">
+                                                                    <h3 className="job-title">{job.title}</h3>
+                                                                    <div className="job-location">
+                                                                        <span>📍</span>
+                                                                        <span>{job.tags.join(' / ')}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="job-actions">
+                                                                    <button onClick={(e) => { e.preventDefault(); archiveMutation.mutate({ id: job.id, status: 'archived' }); }} className="action-btn archive">Archive</button>
+                                                                    <button onClick={(e) => { e.preventDefault(); handleOpenModal(job); }} className="action-btn edit">Edit</button>
+                                                                </div>
+                                                            </JobItemCard>
+                                                        </Link>
                                                     </div>
                                                 )}
                                             </Draggable>
@@ -198,7 +213,8 @@ const JobsBoard = () => {
                         </DragDropContext>
                     )}
                 </div>
-            )}
+            )}   
+            
 
             {/* --- ARCHIVED JOBS SECTION --- */}
             {!isLoading && !isError && archivedJobs.length > 0 && (
@@ -210,34 +226,34 @@ const JobsBoard = () => {
                     {openSection === 'archived' && (
                         <div className="jobs-list">
                             {archivedJobs.map((job, index) => (
-                                <JobItemCard key={job.id} job={job} index={index}>
-                                     <h3 className="job-title">{job.title}</h3>
-                                     <div className="job-deadline">
-                                         <span>✔️</span>
-                                         <span>Deadline: Expired</span>
-                                     </div>
-                                     <div className="job-location">
-                                         <span>📍</span>
-                                         <span>{job.tags.join(' / ')}</span>
-                                     </div>
-                                     <a href="#" className="job-apply-link">
-                                         View Details →
-                                     </a>
-                                </JobItemCard>
+                                <Link to={`/jobs/${job.id}`} key={job.id} className="job-card-link">
+                                    <JobItemCard job={job} index={index}>
+                                        <div className="job-card-main">
+                                            <h3 className="job-title">{job.title}</h3>
+                                            <div className="job-location">
+                                                <span>📍</span>
+                                                <span>{job.tags.join(' / ')}</span>
+                                            </div>
+                                        </div>
+                                        <div className="job-actions">
+                                            <button onClick={(e) => { e.preventDefault(); archiveMutation.mutate({ id: job.id, status: 'active' }); }} className="action-btn unarchive">Unarchive</button>
+                                            <button onClick={(e) => { e.preventDefault(); handleOpenModal(job); }} className="action-btn edit">Edit</button>
+                                        </div>
+                                    </JobItemCard>
+                                </Link>
                             ))}
                         </div>
                     )}
                 </div>
             )}
 
-            <Modal isOpen={isOpen} onClose={closeModal} title={jobToEdit ? 'Edit Job' : 'Create New Job'}>
-                <JobForm
-                    initialData={jobToEdit}
-                    onCancel={closeModal}
-                    onSubmit={handleFormSubmit}
-                    isSaving={createMutation.isLoading || updateMutation.isLoading}
-                />
-            </Modal>
+            <Pagination 
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+            />
+
+            <Outlet />
         </div>
     );
 };

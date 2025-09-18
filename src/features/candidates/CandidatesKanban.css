@@ -1,3 +1,60 @@
+
+/* Add these new styles to your existing file */
+
+:root {
+  /* ... your other colors ... */
+  --warning-color: #F59E0B; /* A nice amber/yellow */
+}
+
+
+.kanban-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.view-controls {
+  display: flex;
+  background-color: var(--surface-secondary);
+  border-radius: var(--border-radius);
+  padding: 4px;
+}
+
+.view-controls button {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-controls button.active {
+  background-color: var(--surface-primary);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.candidate-filters {
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.candidate-filters input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  background-color: var(--surface-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+}
+
+
 .kanban-board h2 {
     text-align: center;
     margin-bottom: 2rem;
@@ -56,4 +113,44 @@
     margin: 0;
     font-size: 14px;
     color: #6c757d;
+}
+
+.kanban-column[data-stage="hired"] {
+  background-color: color-mix(in srgb, var(--status-active) 10%, var(--surface-primary));
+  border-left: 3px solid var(--status-active);
+}
+
+/* Style for the "Rejected" column */
+.kanban-column[data-stage="rejected"] {
+  background-color: color-mix(in srgb, var(--danger-color) 10%, var(--surface-primary));
+  border-left: 3px solid var(--danger-color);
+}
+
+/* Style for cards within the "Hired" column */
+.kanban-column[data-stage="hired"] .candidate-card {
+  border-left-color: var(--status-active);
+}
+
+/* Style for cards within the "Rejected" column */
+.kanban-column[data-stage="rejected"] .candidate-card {
+  border-left-color: var(--danger-color);
+  opacity: 0.8;
+}
+
+/* Make the title of hired/rejected columns more prominent */
+.kanban-column[data-stage="hired"] h3,
+.kanban-column[data-stage="rejected"] h3 {
+    color: var(--text-primary);
+    font-weight: 600;
+} 
+
+.kanban-column:not([data-stage="hired"]):not([data-stage="rejected"]) { 
+   
+  border-left: 3px solid var(--warning-color);
+  background-color: color-mix(in srgb, var(--warning-color) 10%, var(--surface-primary));
+}
+
+/* Style for cards within those columns */
+.kanban-column:not([data-stage="hired"]):not([data-stage="rejected"]) .candidate-card {
+  border-left-color: var(--warning-color);
 }

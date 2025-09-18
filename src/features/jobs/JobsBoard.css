@@ -16,6 +16,12 @@
   --status-active: #34D399;
   --status-archived: #FB923C;
   --text-accent: var(--primary-accent);
+  
+  /* Base variables that use the theme */
+  --shadow-sm: 0 1px 2px 0 var(--shadow-color);
+  --shadow-md: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
+  --shadow-lg: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -4px var(--shadow-color);
+  --border-radius: 0.5rem;
 }
 
 .light-mode {
@@ -30,14 +36,6 @@
   --status-active: #198754;
   --primary-accent: #BF9B7A;
   --primary-accent-hover: #a17c5a;
-}
-
-/* Base variables that use the theme */
-:root {
-  --shadow-sm: 0 1px 2px 0 var(--shadow-color);
-  --shadow-md: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
-  --shadow-lg: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -4px var(--shadow-color);
-  --border-radius: 0.5rem;
 }
 
 
@@ -191,6 +189,12 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+.job-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: contents; /* Makes link behave correctly in a grid */
+}
+
 .job-item {
   position: relative;
   padding: 1.25rem;
@@ -205,12 +209,12 @@ body {
   -webkit-backdrop-filter: blur(12px) saturate(150%);
   animation: fadeInSlideUp 0.5s ease-out forwards;
   opacity: 0;
+  display: flex;
 }
 
 .light-mode .job-item {
   padding: 1.5rem;
 }
-
 
 .jobs-list > * {
   --delay: calc((var(--i, 0) + 1) * 50ms);
@@ -219,12 +223,22 @@ body {
 
 .job-item .job-item-content {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.75rem;
-  text-align: left;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   transform: translateZ(20px);
+}
+
+.light-mode .job-item .job-item-content {
+  align-items: flex-start;
+}
+
+.job-card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+  flex-grow: 1;
 }
 
 /* Glare effect for 3D card */
@@ -242,9 +256,11 @@ body {
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
+
 .light-mode .job-item::before {
   display: none;
 }
+
 .job-item:hover::before {
   opacity: 1;
 }
@@ -255,41 +271,84 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
+.job-item.archived .job-title {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
 .job-title {
-  font-weight: 600;
-  font-size: 1.1rem;
+  font-weight: 700;
+  font-size: 1.15rem;
   color: var(--text-primary);
   line-height: 1.4;
 }
-.light-mode .job-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-}
 
-.job-deadline, .job-location {
+.job-location {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
   color: var(--text-secondary);
 }
-.job-deadline {
-  color: var(--status-active);
-  font-weight: 600;
+
+.job-deadline, .job-apply-link {
+    display: none; /* Hide these as they were placeholders */
 }
 
-.job-apply-link {
-  margin-top: auto;
-  padding-top: 1rem;
+/* 6. Buttons & Actions */
+.job-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+.light-mode .job-actions {
+  align-self: center;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
   font-weight: 600;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+}
+.action-btn.edit {
+  background-color: color-mix(in srgb, var(--primary-accent) 15%, transparent);
   color: var(--primary-accent);
-  text-decoration: none;
 }
-.job-apply-link:hover {
-  color: var(--primary-accent-hover);
+.action-btn.archive {
+  background-color: color-mix(in srgb, var(--danger-color) 15%, transparent);
+  color: var(--danger-color);
+}
+.action-btn.unarchive {
+  background-color: color-mix(in srgb, var(--status-active) 15%, transparent);
+  color: var(--status-active);
 }
 
-/* 6. Create Job Button */
+.action-btn:hover { transform: translateY(-2px); }
+.action-btn.edit:hover {
+  background-color: var(--primary-accent);
+  color: white;
+  box-shadow: 0 0 15px 0 color-mix(in srgb, var(--primary-accent) 50%, transparent);
+}
+.action-btn.archive:hover {
+  background-color: var(--danger-color);
+  color: white;
+  box-shadow: 0 0 15px 0 color-mix(in srgb, var(--danger-color) 50%, transparent);
+}
+.action-btn.unarchive:hover {
+  background-color: var(--status-active);
+  color: white;
+  box-shadow: 0 0 15px 0 color-mix(in srgb, var(--status-active) 50%, transparent);
+}
+
 .create-job-btn {
   display: flex;
   align-items: center;
@@ -314,10 +373,6 @@ body {
 
 /* 7. Theme Toggle Button */
 .theme-toggle {
-  position: fixed;
-  top: 1.25rem;
-  right: 2rem;
-  z-index: 1001;
   background-color: var(--surface-secondary);
   border: 1px solid var(--border-color);
   border-radius: 50%;
@@ -331,6 +386,7 @@ body {
   overflow: hidden;
   transition: all 0.3s ease;
   box-shadow: var(--shadow-md);
+  margin-left: 1rem;
 }
 
 .theme-toggle:hover {

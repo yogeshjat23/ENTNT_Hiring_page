@@ -1,16 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { Link } from 'react-router-dom';
+import VirtualizedCandidateList from './VirtualizedCandidateList';
 import './CandidatesKanban.css';
 
 const STAGES = ['applied', 'screen', 'tech', 'offer', 'hired', 'rejected'];
 
 // Mock API call functions
-const fetchCandidates = async () => {
-    const res = await fetch('/candidates');
-    return res.json();
-};
-
+const fetchCandidates = async () => (await fetch('/candidates')).json();
 const moveCandidate = async ({ id, stage }) => {
     const res = await fetch(`/candidates/${id}`, {
         method: 'PATCH',
@@ -23,37 +21,47 @@ const moveCandidate = async ({ id, stage }) => {
 
 const CandidatesKanban = () => {
     const queryClient = useQueryClient();
-    const { data: candidates = [], isLoading } = useQuery({
+    const [view, setView] = useState('kanban');
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const { data: candidates, isLoading } = useQuery({
         queryKey: ['candidates'],
-        queryFn: fetchCandidates
+        queryFn: fetchCandidates,
     });
 
     const moveMutation = useMutation({
         mutationFn: moveCandidate,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['candidates'] });
-        },
-        // You can add optimistic updates here as well
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['candidates'] }),
     });
 
-    const candidatesByStage = useMemo(() => {
-        const grouped = STAGES.reduce((acc, stage) => {
-            acc[stage] = [];
-            return acc;
-        }, {});
-        candidates.forEach(c => {
-            if (grouped[c.stage]) {
-                grouped[c.stage].push(c);
-            }
+    // CORRECTED: Combined filtering and grouping into a single useMemo hook
+    const { filteredCandidates, candidatesByStage } = useMemo(() => {
+        // Guard clause to prevent errors when data is loading
+        if (!candidates || !Array.isArray(candidates)) {
+            const emptyStages = STAGES.reduce((acc, stage) => ({...acc, [stage]: []}), {});
+            return { filteredCandidates: [], candidatesByStage: emptyStages };
+        }
+
+        // 1. Filter the candidates based on the search term
+        const filtered = candidates.filter(c => {
+            const term = searchTerm.toLowerCase();
+            return c.name.toLowerCase().includes(term) || c.email.toLowerCase().includes(term);
         });
-        return grouped;
-    }, [candidates]);
+        
+        // 2. Group the already-filtered candidates into stages for the Kanban view
+        const grouped = STAGES.reduce((acc, stage) => ({...acc, [stage]: []}), {});
+        filtered.forEach(c => {
+            if (grouped[c.stage]) grouped[c.stage].push(c);
+        });
+
+        // Return both the flat filtered list (for List View) and the grouped list (for Kanban View)
+        return { filteredCandidates: filtered, candidatesByStage: grouped };
+    }, [candidates, searchTerm]);
     
     const onDragEnd = (result) => {
         const { source, destination, draggableId } = result;
-        if (!destination) return;
-        if (source.droppableId === destination.droppableId) return;
-
+        if (!destination || (source.droppableId === destination.droppableId)) return;
+        
         moveMutation.mutate({ id: draggableId, stage: destination.droppableId });
     };
 
@@ -61,42 +69,60 @@ const CandidatesKanban = () => {
 
     return (
         <div className="kanban-board">
-            <h2>Candidates Pipeline</h2>
-            <DragDropContext onDragEnd={onDragEnd}>
-                <div className="kanban-columns">
-                    {STAGES.map(stage => (
-                        <Droppable key={stage} droppableId={stage}>
-                            {(provided, snapshot) => (
-                                <div
-                                    ref={provided.innerRef}
-                                    {...provided.droppableProps}
-                                    className={`kanban-column ${snapshot.isDraggingOver ? 'dragging-over' : ''}`}
-                                >
-                                    <h3>{stage.toUpperCase()} ({candidatesByStage[stage].length})</h3>
-                                    <div className="candidate-list">
-                                        {candidatesByStage[stage].map((candidate, index) => (
-                                            <Draggable key={candidate.id} draggableId={candidate.id} index={index}>
-                                                {(provided) => (
-                                                    <div
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        className="candidate-card"
-                                                    >
-                                                        <h4>{candidate.name}</h4>
-                                                        <p>{candidate.email}</p>
-                                                    </div>
-                                                )}
-                                            </Draggable>
-                                        ))}
-                                        {provided.placeholder}
-                                    </div>
-                                </div>
-                            )}
-                        </Droppable>
-                    ))}
+            <div className="kanban-header">
+                <h2>Candidates Pipeline</h2>
+                <div className="view-controls">
+                    <button onClick={() => setView('kanban')} className={view === 'kanban' ? 'active' : ''}>Kanban View</button>
+                    <button onClick={() => setView('list')} className={view === 'list' ? 'active' : ''}>List View</button>
                 </div>
-            </DragDropContext>
+            </div>
+            
+            <div className="candidate-filters">
+                <input
+                    type="text"
+                    placeholder="Search by name or email..."
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                />
+            </div>
+            
+            {view === 'kanban' ? (
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <div className="kanban-columns">
+                        {STAGES.map(stage => (
+                            <Droppable key={stage} droppableId={stage}>
+                                {(provided) => (
+                                    <div   ref={provided.innerRef}
+  {...provided.droppableProps}
+  className="kanban-column"
+  data-stage={stage} >
+                                        <h3>{stage.toUpperCase()} ({candidatesByStage[stage].length})</h3>
+                                        <div className="candidate-list">
+                                            {candidatesByStage[stage].map((c, index) => (
+                                                <Draggable key={c.id} draggableId={c.id} index={index}>
+                                                    {(provided) => (
+                                                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                                            <Link to={`/candidates/${c.id}`} className="candidate-card-link">
+                                                                <div className="candidate-card">
+                                                                    <h4>{c.name}</h4>
+                                                                    <p>{c.email}</p>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+                                            ))}
+                                            {provided.placeholder}
+                                        </div>
+                                    </div>
+                                )}
+                            </Droppable>
+                        ))}
+                    </div>
+                </DragDropContext>
+            ) : (
+                <VirtualizedCandidateList candidates={filteredCandidates} />
+            )}
         </div>
     );
 };

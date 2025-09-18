@@ -1,0 +1,27 @@
+.job-details-content {
+  color: var(--text-secondary);
+}
+.job-detail-field {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+.job-detail-field strong {
+  color: var(--text-primary);
+}
+.job-detail-field span.active {
+  color: var(--status-active);
+  font-weight: bold;
+}
+.job-detail-field span.archived {
+  color: var(--status-archived);
+  font-weight: bold;
+}
+.job-description {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+.job-description h3 {
+  color: var(--text-primary);
+  margin-top: 0;
+}

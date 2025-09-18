@@ -34,7 +34,11 @@ export const handlers = [
  rest.get('/jobs', async (req, res, ctx) => {
     const search = req.url.searchParams.get('search') || '';
     const tagSearch = req.url.searchParams.get('tagSearch') || '';
-    let jobs = db.jobs.orderBy('order');
+    const page = parseInt(req.url.searchParams.get('page') || '1', 10);
+    const pageSize = parseInt(req.url.searchParams.get('pageSize') || '8', 10);
+ let collection = db.jobs.orderBy('order');
+    let jobs = db.jobs.orderBy('order'); 
+    
     if (search) {
       const regex = new RegExp(escapeRegExp(search), 'i');
       jobs = jobs.filter(job => regex.test(job.title));
@@ -42,10 +46,27 @@ export const handlers = [
     if (tagSearch) {
       const tagRegex = new RegExp(escapeRegExp(tagSearch), 'i');
       jobs = jobs.filter(job => job.tags.some(tag => tagRegex.test(tag)));
-    }
-    const allJobs = await jobs.toArray();
+    } 
+    const allFilteredJobs = await collection.toArray();
+    const totalCount = allFilteredJobs.length;
+
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    const paginatedJobs = allFilteredJobs.slice(start, end);
+    const allJobs = await jobs.toArray(); 
+   
     return withNetwork(res, ctx, allJobs);
-  }),
+  }), 
+  rest.get('/jobs/:id', async (req, res, ctx) => {
+    const { id } = req.params;
+    const job = await db.jobs.get(id);
+
+    if (job) {
+        return withNetwork(res, ctx, job);
+    } else {
+        return withNetwork(res, ctx, { error: 'Job not found' }, { status: 404 });
+    }
+}),
 
   rest.post('/jobs', async (req, res, ctx) => {
     const body = await req.json();
@@ -100,19 +121,33 @@ export const handlers = [
     const allCandidates = await db.candidates.toArray();
     return withNetwork(res, ctx, allCandidates);
   }),
-
-  rest.patch('/candidates/:id', async (req, res, ctx) => {
+rest.get('/candidates/:id', async (req, res, ctx) => {
     const { id } = req.params;
-    const { stage } = await req.json();
+    const candidate = await db.candidates.get(id);
+
+    if (candidate) {
+        return withNetwork(res, ctx, candidate);
+    } else {
+        return withNetwork(res, ctx, { error: 'Candidate not found' }, { status: 404 });
+    }
+}),
+  
+rest.patch('/candidates/:id', async (req, res, ctx) => {
+    const { id } = req.params;
+    const { stage, notes } = await req.json(); // Get notes from the request body
     await db.candidates.update(id, { stage });
+    
+    // Add the notes to the timeline entry
     await db.candidateTimeline.add({
       candidateId: id,
       stage,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      notes: notes || '' // Save notes or an empty string
     });
+
     const updatedCandidate = await db.candidates.get(id);
     return withNetwork(res, ctx, updatedCandidate);
-  }),
+}),
 
   rest.get('/candidates/:id/timeline', async (req, res, ctx) => {
     const { id } = req.params;

@@ -1,0 +1,52 @@
+.notes-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.notes-modal-content textarea {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--surface-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    resize: vertical;
+    box-sizing: border-box;
+}
+.mention-suggestions {
+    background-color: var(--surface-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+    font-size: 0.9rem;
+}
+.mention-suggestions span {
+    display: inline-block;
+    background-color: var(--primary-accent);
+    color: white;
+    padding: 2px 8px;
+    margin: 4px;
+    border-radius: 4px;
+}
+.notes-modal-content .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.notes-modal-content button {
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.notes-modal-content .btn-cancel {
+  background-color: var(--surface-secondary);
+  color: var(--text-secondary);
+}
+.notes-modal-content .btn-submit {
+  background-color: var(--primary-accent);
+  color: white;
+}
