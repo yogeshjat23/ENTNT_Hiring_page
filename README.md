@@ -1,70 +1,58 @@
-# Getting Started with Create React App
+# TalentFlow - A Mini Hiring Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a front-end-only React application built to simulate a hiring management platform for an HR team. It features job management, candidate tracking through a Kanban pipeline, and a dynamic assessment builder.
 
-## Available Scripts
+**Live Deployed App:** [Link to your deployed app on Vercel/Netlify]
 
-In the project directory, you can run:
+**GitHub Repository:** [Link to your GitHub repo]
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+* **Jobs Board:** Create, edit, archive, and reorder jobs via drag-and-drop with optimistic UI updates and error rollback.
+* **Candidate Pipeline:** Manage candidates in a Kanban board, moving them between stages like Applied, Screen, Tech, and Offer.
+* **Assessment Builder:** Dynamically create job-specific quizzes with multiple question types and a live preview pane.
+* **Local Persistence:** All data is persisted locally in your browser using IndexedDB, so your state is saved on refresh.
+* **Mock API:** A simulated REST API using Mock Service Worker (MSW) provides realistic network latency and occasional errors to test robustness.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tech Stack
 
-### `npm test`
+* **Framework:** React
+* **State Management:** React Query (for server state) & Zustand (for global UI state)
+* **Routing:** React Router v6
+* **Drag & Drop:** React Beautiful DnD
+* **Virtualization:** React Window
+* **API Mocking:** Mock Service Worker (MSW)
+* **Local Database:** Dexie.js (IndexedDB Wrapper)
+* **Styling:** Plain CSS with a component-based methodology.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Getting Started
 
-### `npm run build`
+### Prerequisites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* Node.js (v16 or later)
+* npm or yarn
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Installation & Setup
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1.  **Clone the repository:**
+    ```bash
+    git clone [your-repo-link]
+    cd talentflow
+    ```
 
-### `npm run eject`
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3.  **Run the development server:**
+    ```bash
+    npm start
+    ```
+    The application will be available at `http://localhost:3000`. The MSW mock server will start automatically in development mode.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Architectural Decisions
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* **State Management:** I chose **React Query** to manage all interactions with the mock API. Its caching, automatic refetching, and mutation helpers (like `onMutate` for optimistic updates) are perfect for handling asynchronous server state. For simple, global UI state (like a modal's open/close status), a lightweight library like **Zustand** would be ideal to avoid prop drilling without the boilerplate of Redux.
+* **API Mocking & Persistence:** **MSW** was chosen because it intercepts requests at the network level, making the application code completely unaware that it's talking to a mock server. This makes transitioning to a real API seamless. **Dexie.js** provides a friendly, promise-based API on top of the verbose IndexedDB, making client-side storage clean and easy to manage. MSW handlers write through to the Dexie database to ensure persistence.
+* **Component Structure:** The code is organized by features (`/features`) and further broken down into reusable `components`. This makes the codebase modular and scalable. Custom hooks (`/hooks`) are used to encapsulate and reuse logic (e.g., `useJobs`, `useCandidates`).
