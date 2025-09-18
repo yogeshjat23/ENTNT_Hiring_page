@@ -2,44 +2,34 @@
 
 /* 1. Theme Variables */
 :root {
-  /* NEW & IMPROVED DARK MODE (DEFAULT) */
+  /* DARK MODE (DEFAULT) */
   --background-primary: #0D1117;
-  /* Deeper, near-black background */
   --surface-primary: rgba(22, 27, 34, 0.75);
-  /* Darker, higher contrast cards */
   --surface-secondary: rgba(30, 36, 44, 0.8);
-  /* Subtle hover for cards */
   --border-color: rgba(48, 54, 61, 0.8);
-  /* A slightly lighter border */
-
   --primary-accent: #8B5CF6;
-  /* A more vibrant, modern purple */
   --primary-accent-hover: #7C3AED;
-
-  --text-primary: #ffffff;
-  /* A slightly softer white */
-  --text-secondary: #ffffff;
-  /* Muted grey for secondary text */
-
+  --text-primary: #E6EDF3;
+  --text-secondary: #7D8590;
   --shadow-color: rgba(0, 0, 0, 0.4);
   --danger-color: #F77272;
-  /* A slightly brighter red */
   --status-active: #34D399;
-  /* A vibrant green */
   --status-archived: #FB923C;
-  /* A vibrant orange */
   --text-accent: var(--primary-accent);
 }
 
 .light-mode {
-  /* LIGHT MODE (Unchanged) */
-  --background-primary: #F3F4F6;
-  --surface-primary: rgba(255, 255, 255, 0.7);
-  --surface-secondary: #F9FAFB;
-  --border-color: rgba(229, 231, 235, 0.8);
-  --text-primary: #111827;
-  --text-secondary: #4B5563;
-  --shadow-color: rgba(0, 0, 0, 0.1);
+  /* LIGHT MODE TO MATCH IMAGE */
+  --background-primary: #FDFCFB;
+  --surface-primary: #F6F3EF;
+  --surface-secondary: #EDE8E1;
+  --border-color: #E5E7EB;
+  --text-primary: #212529;
+  --text-secondary: #6C757D;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+  --status-active: #198754;
+  --primary-accent: #BF9B7A;
+  --primary-accent-hover: #a17c5a;
 }
 
 /* Base variables that use the theme */
@@ -48,31 +38,21 @@
   --shadow-md: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
   --shadow-lg: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -4px var(--shadow-color);
   --border-radius: 0.5rem;
-  /* 8px */
 }
 
 
 /* 2. Global & Layout Styles */
 @keyframes background-pan {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 body {
-  /* Default dark mode animated background */
   background-color: #0c0a18;
   background-image: radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 0.15) 0px, transparent 50%),
-    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 0.1) 0px, transparent 50%),
-    radial-gradient(at 74% 94%, hsla(333, 98%, 62%, 0.1) 0px, transparent 50%);
+                    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 0.1) 0px, transparent 50%),
+                    radial-gradient(at 74% 94%, hsla(333, 98%, 62%, 0.1) 0px, transparent 50%);
   background-size: 200% 200%;
   animation: background-pan 20s ease-in-out infinite;
   color: var(--text-primary);
@@ -80,19 +60,16 @@ body {
 }
 
 .light-mode body {
-  /* Light mode animated background override */
-  background-color: #f0f2ff;
-  background-image: radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 0.1) 0px, transparent 50%),
-    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 0.15) 0px, transparent 50%),
-    radial-gradient(at 74% 94%, hsla(333, 98%, 62%, 0.1) 0px, transparent 50%);
+  background-color: var(--background-primary);
+  background-image: none;
+  animation: none;
 }
 
 .jobs-board {
-  max-width: 900px;
+  max-width: 1200px;
   margin: auto;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: system-ui, sans-serif;
   perspective: 1000px;
-  /* For 3D transforms */
 }
 
 .board-header {
@@ -104,19 +81,30 @@ body {
 }
 
 .board-header h2 {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: black;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
 
-/* 3. Filter Input */
+/* 3. Filter Section */
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .filters-container {
+    flex-direction: row;
+  }
+}
+
 .filter-input {
   width: 100%;
   padding: 12px 16px;
-  margin-bottom: 2rem;
   font-size: 1rem;
-
   background-color: var(--surface-primary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
@@ -181,34 +169,37 @@ body {
 /* 5. Job List & Items */
 .jobs-list {
   padding-top: 0;
-  border-radius: 0;
-  box-shadow: none;
-  background-color: transparent;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .jobs-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .jobs-list {
+    grid-template-columns: 1fr;
+  }
 }
 
 @keyframes fadeInSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .job-item {
   position: relative;
   padding: 1.25rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   background-color: var(--surface-primary);
   border: 1px solid var(--border-color);
-  border-left-width: 5px;
-  /* Status indicator */
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
-  transition: transform 0.1s linear;
+  transition: transform 0.1s linear, background-color 0.3s ease, border-color 0.3s ease;
   will-change: transform;
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
@@ -216,17 +207,24 @@ body {
   opacity: 0;
 }
 
-.jobs-list>* {
+.light-mode .job-item {
+  padding: 1.5rem;
+}
+
+
+.jobs-list > * {
   --delay: calc((var(--i, 0) + 1) * 50ms);
   animation-delay: var(--delay);
 }
 
 .job-item .job-item-content {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  text-align: left;
+  width: 100%;
   transform: translateZ(20px);
-  /* Lifts content in 3D space */
 }
 
 /* Glare effect for 3D card */
@@ -244,95 +242,54 @@ body {
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
-
+.light-mode .job-item::before {
+  display: none;
+}
 .job-item:hover::before {
   opacity: 1;
 }
 
-.job-item.active {
-  border-left-color: var(--status-active);
-}
-
-.job-item.archived {
-  border-left-color: var(--status-archived);
-  background-color: color-mix(in srgb, var(--surface-primary) 50%, var(--background-primary));
-}
-
-.job-item.archived .job-title {
-  color: var(--text-secondary);
-  text-decoration: line-through;
+.light-mode .job-item:hover {
+  transform: translateY(-5px);
+  background-color: var(--surface-secondary);
+  box-shadow: var(--shadow-lg);
 }
 
 .job-title {
   font-weight: 600;
   font-size: 1.1rem;
   color: var(--text-primary);
+  line-height: 1.4;
+}
+.light-mode .job-title {
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
-
-/* 6. Buttons & Actions (Pill Design) */
-.job-actions {
+.job-deadline, .job-location {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
 }
-
-/* Base style for all action buttons */
-.action-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 9999px;
-  /* Pill shape */
-  cursor: pointer;
-  transition: all 0.2s ease-out;
-}
-
-/* Modifier for the 'Edit' button */
-.action-btn.edit {
-  background-color: color-mix(in srgb, var(--primary-accent) 15%, transparent);
-  color: var(--primary-accent);
-}
-
-/* Modifier for the 'Archive' button */
-.action-btn.archive {
-  background-color: color-mix(in srgb, var(--danger-color) 15%, transparent);
-  color: var(--danger-color);
-}
-
-/* Modifier for the 'Unarchive' button */
-.action-btn.unarchive {
-  background-color: color-mix(in srgb, var(--status-active) 15%, transparent);
+.job-deadline {
   color: var(--status-active);
+  font-weight: 600;
 }
 
-/* Hover effect for all action buttons */
-.action-btn:hover {
-  transform: translateY(-2px);
+.job-apply-link {
+  margin-top: auto;
+  padding-top: 1rem;
+  font-weight: 600;
+  color: var(--primary-accent);
+  text-decoration: none;
+}
+.job-apply-link:hover {
+  color: var(--primary-accent-hover);
 }
 
-.action-btn.edit:hover {
-  background-color: var(--primary-accent);
-  color: white;
-  box-shadow: 0 0 15px 0 color-mix(in srgb, var(--primary-accent) 50%, transparent);
-}
-
-.action-btn.archive:hover {
-  background-color: var(--danger-color);
-  color: white;
-  box-shadow: 0 0 15px 0 color-mix(in srgb, var(--danger-color) 50%, transparent);
-}
-
-.action-btn.unarchive:hover {
-  background-color: var(--status-active);
-  color: white;
-  box-shadow: 0 0 15px 0 color-mix(in srgb, var(--status-active) 50%, transparent);
-}
-
+/* 6. Create Job Button */
 .create-job-btn {
   display: flex;
   align-items: center;
@@ -348,7 +305,6 @@ body {
   box-shadow: var(--shadow-md);
   transition: all 0.2s ease;
 }
-
 .create-job-btn:hover {
   background-color: var(--primary-accent-hover);
   box-shadow: var(--shadow-lg);
@@ -358,7 +314,10 @@ body {
 
 /* 7. Theme Toggle Button */
 .theme-toggle {
-  /* The position, top, right, and z-index properties have been removed */
+  position: fixed;
+  top: 1.25rem;
+  right: 2rem;
+  z-index: 1001;
   background-color: var(--surface-secondary);
   border: 1px solid var(--border-color);
   border-radius: 50%;
@@ -366,53 +325,36 @@ body {
   height: 44px;
   padding: 0;
   cursor: pointer;
-  
   display: flex;
   align-items: center;
   justify-content: center;
-  
   overflow: hidden;
   transition: all 0.3s ease;
   box-shadow: var(--shadow-md);
-  
-  /* Add a little margin to space it from the other links */
-  margin-left: 1rem; 
 }
 
 .theme-toggle:hover {
   border-color: var(--primary-accent);
 }
-
 .theme-toggle .icon {
   position: absolute;
   font-size: 1.5rem;
   transition: transform 0.4s cubic-bezier(0.445, 0.050, 0.550, 0.950),
-    opacity 0.3s ease;
+              opacity 0.3s ease;
 }
-
 .theme-toggle .sun {
   transform: translateY(100%);
   opacity: 0;
 }
-
 .light-mode .theme-toggle .sun {
   transform: translateY(0);
   opacity: 1;
 }
-
 .theme-toggle .moon {
   transform: translateY(0);
   opacity: 1;
 }
-
 .light-mode .theme-toggle .moon {
   transform: translateY(-100%);
   opacity: 0;
 }
-
-input::placeholder {
-  font-weight: bold;
-  opacity: 0.8;
-  color: var(--text-primary);
-}  
- 

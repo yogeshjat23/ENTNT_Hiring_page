@@ -1,5 +1,8 @@
 import { rest } from 'msw';
-import { db } from './db';
+import { db } from './db'; 
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 // Helper: random delay + error injection
 const withNetwork = (res, ctx, data, {
@@ -28,21 +31,18 @@ const withNetwork = (res, ctx, data, {
 };
 
 export const handlers = [
-  // === JOBS ===
-  rest.get('/jobs', async (req, res, ctx) => {
+ rest.get('/jobs', async (req, res, ctx) => {
     const search = req.url.searchParams.get('search') || '';
-    const status = req.url.searchParams.get('status') || '';
-
+    const tagSearch = req.url.searchParams.get('tagSearch') || '';
     let jobs = db.jobs.orderBy('order');
-    if (status) {
-      jobs = jobs.filter(job => job.status === status);
-    }
     if (search) {
-      jobs = jobs.filter(job =>
-        job.title.toLowerCase().includes(search.toLowerCase())
-      );
+      const regex = new RegExp(escapeRegExp(search), 'i');
+      jobs = jobs.filter(job => regex.test(job.title));
     }
-
+    if (tagSearch) {
+      const tagRegex = new RegExp(escapeRegExp(tagSearch), 'i');
+      jobs = jobs.filter(job => job.tags.some(tag => tagRegex.test(tag)));
+    }
     const allJobs = await jobs.toArray();
     return withNetwork(res, ctx, allJobs);
   }),
@@ -70,7 +70,6 @@ export const handlers = [
   rest.patch('/jobs/:id/reorder', async (req, res, ctx) => {
     const { fromOrder, toOrder } = await req.json();
 
-    // 30% failure chance to test rollback
     if (Math.random() < 0.3) {
       return withNetwork(res, ctx, null, {
         errorStatus: 500,
@@ -78,12 +77,17 @@ export const handlers = [
       });
     }
 
-    const jobsToUpdate = await db.jobs.orderBy('order').toArray();
-    const [movedJob] = jobsToUpdate.splice(fromOrder, 1);
-    jobsToUpdate.splice(toOrder, 0, movedJob);
+    const allJobs = await db.jobs.orderBy('order').toArray();
+    const activeJobs = allJobs.filter(job => job.status === 'active');
+    const archivedJobs = allJobs.filter(job => job.status === 'archived');
+
+    const [movedJob] = activeJobs.splice(fromOrder, 1);
+    activeJobs.splice(toOrder, 0, movedJob);
+
+    const finalJobsList = [...activeJobs, ...archivedJobs];
 
     await Promise.all(
-      jobsToUpdate.map((job, index) =>
+      finalJobsList.map((job, index) =>
         db.jobs.update(job.id, { order: index })
       )
     );

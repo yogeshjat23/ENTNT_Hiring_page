@@ -9,8 +9,8 @@ import JobItemCard from '../../components/jobs/JobItemCard';
 import './JobsBoard.css';
 
 // --- API Call Functions ---
-const fetchJobs = async (filter) => {
-    const res = await fetch(`/jobs?search=${filter}`);
+const fetchJobs = async (titleFilter, tagFilter) => {
+    const res = await fetch(`/jobs?search=${titleFilter}&tagSearch=${tagFilter}`);
     if (!res.ok) throw new Error('Network response was not ok');
     return res.json();
 };
@@ -36,16 +36,6 @@ const updateJob = async (jobData) => {
     return res.json();
 };
 
-const toggleJobStatus = async ({ id, status }) => {
-    const res = await fetch(`/jobs/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
-    });
-    if (!res.ok) throw new Error('Failed to update job status');
-    return res.json();
-};
-
 const reorderJobs = async (reorderData) => {
     const res = await fetch(`/jobs/some-id/reorder`, {
         method: 'PATCH',
@@ -59,14 +49,17 @@ const reorderJobs = async (reorderData) => {
 
 const JobsBoard = () => {
     const queryClient = useQueryClient();
-    const [filter, setFilter] = useState('');
-    const debouncedFilter = useDebounce(filter, 300);
+    const [titleFilter, setTitleFilter] = useState('');
+    const [tagFilter, setTagFilter] = useState('');
+    const debouncedTitleFilter = useDebounce(titleFilter, 300);
+    const debouncedTagFilter = useDebounce(tagFilter, 300);
+
     const { isOpen, jobToEdit, openModal, closeModal } = useJobModalStore();
     const [openSection, setOpenSection] = useState(null);
 
     const { data: jobs = [], isLoading, isError } = useQuery({
-        queryKey: ['jobs', debouncedFilter],
-        queryFn: () => fetchJobs(debouncedFilter),
+        queryKey: ['jobs', debouncedTitleFilter, debouncedTagFilter],
+        queryFn: () => fetchJobs(debouncedTitleFilter, debouncedTagFilter),
         keepPreviousData: true,
     });
 
@@ -83,27 +76,26 @@ const JobsBoard = () => {
     };
     const createMutation = useMutation({ mutationFn: createJob, ...mutationOptions });
     const updateMutation = useMutation({ mutationFn: updateJob, ...mutationOptions });
-    const archiveMutation = useMutation({
-        mutationFn: toggleJobStatus,
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }),
-        onError: (error) => alert(error.message),
-    });
+   
     const reorderMutation = useMutation({
         mutationFn: reorderJobs,
         onMutate: async (newOrder) => {
-            await queryClient.cancelQueries({ queryKey: ['jobs', debouncedFilter] });
-            const previousJobs = queryClient.getQueryData(['jobs', debouncedFilter]) || [];
-            const reorderedJobs = [...previousJobs];
-            const [movedJob] = reorderedJobs.splice(newOrder.fromOrder, 1);
-            reorderedJobs.splice(newOrder.toOrder, 0, movedJob);
-            queryClient.setQueryData(['jobs', debouncedFilter], reorderedJobs);
+            await queryClient.cancelQueries({ queryKey: ['jobs', debouncedTitleFilter, debouncedTagFilter] });
+            const previousJobs = queryClient.getQueryData(['jobs', debouncedTitleFilter, debouncedTagFilter]) || [];
+            const previousActiveJobs = previousJobs.filter(job => job.status === 'active');
+            const previousArchivedJobs = previousJobs.filter(job => job.status === 'archived');
+            const reorderedActiveJobs = [...previousActiveJobs];
+            const [movedJob] = reorderedActiveJobs.splice(newOrder.fromOrder, 1);
+            reorderedActiveJobs.splice(newOrder.toOrder, 0, movedJob);
+            const newFullList = [...reorderedActiveJobs, ...previousArchivedJobs];
+            queryClient.setQueryData(['jobs', debouncedTitleFilter, debouncedTagFilter], newFullList);
             return { previousJobs };
         },
         onError: (err, newOrder, context) => {
-            queryClient.setQueryData(['jobs', debouncedFilter], context.previousJobs || []);
+            queryClient.setQueryData(['jobs', debouncedTitleFilter, debouncedTagFilter], context.previousJobs || []);
             alert('Failed to reorder jobs. Changes have been rolled back.');
         },
-        onSettled: () => queryClient.invalidateQueries({ queryKey: ['jobs', debouncedFilter] }),
+        onSettled: () => queryClient.invalidateQueries({ queryKey: ['jobs', debouncedTitleFilter, debouncedTagFilter] }),
     });
 
     const onDragEnd = (result) => {
@@ -130,14 +122,23 @@ const JobsBoard = () => {
                     + <span>Create Job</span>
                 </button>
             </div>
-
-            <input
-                type="text"
-                placeholder="Filter by title..."
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="filter-input"
-            />
+            
+            <div className="filters-container">
+                <input
+                    type="text"
+                    placeholder="Filter by title..."
+                    value={titleFilter}
+                    onChange={(e) => setTitleFilter(e.target.value)}
+                    className="filter-input"
+                />
+                <input
+                    type="text"
+                    placeholder="Filter by tag..."
+                    value={tagFilter}
+                    onChange={(e) => setTagFilter(e.target.value)}
+                    className="filter-input"
+                />
+            </div>
 
             {isLoading && <div>Loading...</div>}
             {isError && <div>Error fetching jobs.</div>}
@@ -156,14 +157,21 @@ const JobsBoard = () => {
                                     <div {...provided.droppableProps} ref={provided.innerRef} className="jobs-list">
                                         {activeJobs.map((job, index) => (
                                             <Draggable key={job.id} draggableId={job.id} index={index}>
-                                                {(provided) => (
+                                                {(provided, snapshot) => (
                                                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                        <JobItemCard job={job} index={index}>
-                                                            <span className="job-title">{job.title}</span>
-                                                            <div className="job-actions">
-                                                                <button onClick={() => archiveMutation.mutate({ id: job.id, status: 'archived' })} className="action-btn archive">Archive</button>
-                                                                <button onClick={() => openModal(job)} className="action-btn edit">Edit</button>
+                                                        <JobItemCard job={job} index={index} isDragging={snapshot.isDragging}>
+                                                            <h3 className="job-title">{job.title}</h3>
+                                                            <div className="job-deadline">
+                                                                <span>✔️</span>
+                                                                <span>Deadline: November 2, 2025</span>
                                                             </div>
+                                                            <div className="job-location">
+                                                                <span>📍</span>
+                                                                <span>{job.tags.join(' / ')}</span>
+                                                            </div>
+                                                            <a href="#" className="job-apply-link">
+                                                                Apply now →
+                                                            </a>
                                                         </JobItemCard>
                                                     </div>
                                                 )}
@@ -189,11 +197,18 @@ const JobsBoard = () => {
                         <div className="jobs-list">
                             {archivedJobs.map((job, index) => (
                                 <JobItemCard key={job.id} job={job} index={index}>
-                                    <span className="job-title">{job.title}</span>
-                                    <div className="job-actions">
-                                        <button onClick={() => archiveMutation.mutate({ id: job.id, status: 'active' })} className="action-btn unarchive">Unarchive</button>
-                                        <button onClick={() => openModal(job)} className="action-btn edit">Edit</button>
-                                    </div>
+                                     <h3 className="job-title">{job.title}</h3>
+                                     <div className="job-deadline">
+                                         <span>✔️</span>
+                                         <span>Deadline: Expired</span>
+                                     </div>
+                                     <div className="job-location">
+                                         <span>📍</span>
+                                         <span>{job.tags.join(' / ')}</span>
+                                     </div>
+                                     <a href="#" className="job-apply-link">
+                                         View Details →
+                                     </a>
                                 </JobItemCard>
                             ))}
                         </div>
