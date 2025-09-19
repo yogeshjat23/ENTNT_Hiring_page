@@ -147,7 +147,8 @@ rest.patch('/candidates/:id', async (req, res, ctx) => {
 
     const updatedCandidate = await db.candidates.get(id);
     return withNetwork(res, ctx, updatedCandidate);
-}),
+}), 
+
 
   rest.get('/candidates/:id/timeline', async (req, res, ctx) => {
     const { id } = req.params;
@@ -161,6 +162,11 @@ rest.patch('/candidates/:id', async (req, res, ctx) => {
   }),
 
   // === ASSESSMENTS ===
+
+  rest.get('/assessments', async (req, res, ctx) => {
+    const allAssessments = await db.assessments.toArray();
+    return withNetwork(res, ctx, allAssessments);
+}),
   rest.get('/assessments/:jobId', async (req, res, ctx) => {
     const { jobId } = req.params;
     const assessment = await db.assessments.get(jobId);

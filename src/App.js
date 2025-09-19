@@ -11,6 +11,8 @@ import Modal from './components/common/Modal';
 import JobForm from './components/jobs/JobForm';
 import JobDetailsModal from './features/jobs/JobDetailsModal'; // Ensure this is imported
 import CandidateProfile from "./features/candidates/CandidateProfile";
+import AllAssessmentsPage from './features/assessments/AllAssessmentsPage';
+import CreateAssessmentPage from './features/assessments/CreateAssessmentPage';
 import './App.css';
 
 
@@ -32,19 +34,24 @@ function App() {
           <nav>
             <h1>TalentFlow</h1>
             <NavLink to="/jobs">Jobs</NavLink>
-            <NavLink to="/candidates">Candidates</NavLink>
-            <NavLink to="/assessments/job-1">Assessments</NavLink>
+            <NavLink to="/candidates">Candidates</NavLink> 
+            <NavLink to = "/assessments/new" > Create Assessment </NavLink> 
+              <NavLink to="/assessments" end>All Assessments</NavLink>
             <ThemeToggle />
           </nav>
 
           <main>
             <Routes>
               {/* The JobDetailsModal route is no longer nested here */}
+            
               <Route path="/" element={<JobsBoard />} />
               <Route path="/jobs" element={<JobsBoard />} />
               <Route path="/candidates" element={<CandidatesKanban />} />
               <Route path="/candidates/:id" element={<CandidateProfile />} />
+                  <Route path="/assessments" element={<AllAssessmentsPage />} />
+                  < Route path = "/assessments/new" element = {<CreateAssessmentPage/>}/>
               <Route path="/assessments/:jobId" element={<AssessmentBuilder />} />
+              
             </Routes>
           </main>
 
