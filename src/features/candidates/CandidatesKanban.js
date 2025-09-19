@@ -57,7 +57,8 @@ const CandidatesKanban = () => {
 
         // Return both the flat filtered list (for List View) and the grouped list (for Kanban View)
         return { filteredCandidates: filtered, candidatesByStage: grouped };
-    }, [candidates, searchTerm]);
+    }, [candidates, searchTerm]); 
+    
     
     const onDragEnd = (result) => {
         const { source, destination, draggableId } = result;
@@ -146,7 +147,8 @@ const CandidatesKanban = () => {
                     </div>
                 </DragDropContext>
             ) : (
-                <VirtualizedCandidateList candidates={filteredCandidates} />
+                <VirtualizedCandidateList candidates={filteredCandidates} /> 
+        
             )}
         </div>
     );
