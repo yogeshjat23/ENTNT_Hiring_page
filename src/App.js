@@ -4,12 +4,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import { useThemeStore } from './store/useThemeStore';
 import ThemeToggle from './components/common/ThemeToggle';
-import { FiBriefcase, FiUsers, FiClipboard, FiList, FiLogOut, FiLogIn } from 'react-icons/fi';
+import { FiBriefcase, FiUsers, FiClipboard, FiList, FiLogOut, FiLogIn  ,FiRefreshCw } from 'react-icons/fi';
 import Modal from './components/common/Modal';
 import JobForm from './components/jobs/JobForm';
 import { useJobModalStore } from './store/useJobModalStore';
 
-// Page Components
+// Page Components 
+
+import ErrorBoundary from './components/common/ErrorBoundary';
 import HomePage from './features/home/HomePage';
 import LoginPage from './features/login/LoginPage';
 import JobsBoard from './features/jobs/JobsBoard';
@@ -28,6 +30,16 @@ const queryClient = new QueryClient();
 const AppLayout = () => {
   const { user, isLoggedIn, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+   const [isRefreshing, setIsRefreshing] = useState(false); // Add this state
+
+  const handleRefresh = () => {
+    setIsRefreshing(true); // Start animation
+    // Reload the page after a short delay to allow the animation to be seen
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  };
+
 
   return (
     <div className="App">
@@ -44,6 +56,15 @@ const AppLayout = () => {
           )}
         </div>
         <div className="nav-right">
+    
+          <button 
+            onClick={handleRefresh} 
+            className={`nav-action-btn ${isRefreshing ? 'refreshing' : ''}`} 
+            title="Refresh Page"
+          >
+            <FiRefreshCw />
+          </button>
+
           <ThemeToggle />
           {isLoggedIn ? (
             <div className="profile-section">
@@ -81,6 +102,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
+        <ErrorBoundary>
         <AuthProvider>
           <Routes>
             {/* All pages now use the smart AppLayout */}
@@ -109,6 +131,7 @@ function App() {
             <JobForm />
           </Modal>
         </AuthProvider>
+          </ErrorBoundary>
       </Router>
     </QueryClientProvider>
   );

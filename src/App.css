@@ -287,3 +287,44 @@ nav a.active {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
+
+/* Add this to your App.css file */
+
+.nav-action-btn {
+  background-color: var(--surface-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.nav-action-btn:hover {
+  border-color: var(--primary-accent);
+  color: var(--primary-accent);
+}
+
+.nav-action-btn svg {
+    width: 20px;
+    height: 20px;
+}
+/* Add this keyframe animation to your App.css */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Add this class to style the button during refresh */
+.nav-action-btn.refreshing svg {
+  animation: spin 0.5s linear infinite;
+}
