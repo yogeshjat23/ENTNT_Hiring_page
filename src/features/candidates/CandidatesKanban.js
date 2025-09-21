@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { Link } from 'react-router-dom';
 import VirtualizedCandidateList from './VirtualizedCandidateList';
-import { FiMail } from 'react-icons/fi';
+import { FiMail  } from 'react-icons/fi';
 import Loader from '../../components/common/Loader'; 
 import NotesModal from './NotesModal';
 import './CandidatesKanban.css';
@@ -12,6 +12,7 @@ const STAGES = ['applied', 'screen', 'tech', 'offer', 'hired', 'rejected'];
 
 // Mock API call functions
 const fetchCandidates = async () => (await fetch('/candidates')).json();
+
 const fetchAllJobs = async () => (await fetch('/jobs/all')).json();
 const moveCandidate = async ({ id, stage, notes }) => {
     const res = await fetch(`/candidates/${id}`, {
@@ -26,8 +27,7 @@ const moveCandidate = async ({ id, stage, notes }) => {
 const CandidatesKanban = () => {
     const queryClient = useQueryClient();
     const [view, setView] = useState('kanban');
-    const [searchTerm, setSearchTerm] = useState('');
-
+    const [searchTerm, setSearchTerm] = useState(''); 
     const { data: candidates, isLoading } = useQuery({
         queryKey: ['candidates'],
         queryFn: fetchCandidates,
@@ -100,9 +100,11 @@ const CandidatesKanban = () => {
         if (!jobs) return new Map();
         return new Map(jobs.map(job => [job.id, job]));
     }, [jobs]);
-
+ 
+    
 
     if (isLoading) return <Loader text="Loading Candidates..." />;
+     
 
     return (
         <div className="kanban-board">
@@ -150,7 +152,7 @@ const CandidatesKanban = () => {
                     </div>
                     <div className="candidate-email">
                         <FiMail size={14} />
-                        <span>{c.email}</span>
+                        <span>{c.email } </span>
                     </div>  
                      <div className="candidate-job-link-wrapper">
             <Link 
@@ -159,7 +161,8 @@ const CandidatesKanban = () => {
                 onClick={(e) => e.stopPropagation()} // Prevents the main card link from firing
             >
                 {jobMap.get(c.jobId)?.title || c.jobId}
-            </Link>
+            </Link> 
+            
         </div>
                 </div>
             </Link>
