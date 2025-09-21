@@ -147,4 +147,36 @@
 }
 .profile-status.error {
     color: var(--danger-color);
+} 
+/* In CandidateProfile.css */
+
+.timeline-item {
+  display: flex; /* This is the key change */
+  align-items: flex-start; /* Aligns the icon and content to the top */
+  gap: 1.5rem; /* Space between the icon and the content */
+  position: relative;
+  padding-left: 15px; /* Adjust padding to accommodate the line */
+  margin-bottom: 1.5rem;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-icon-wrapper {
+  position: relative; /* Changed from absolute */
+  flex-shrink: 0; /* Prevents the icon from shrinking */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-accent);
+  z-index: 1;
+  margin-left: 15px; /* Pulls the icon left to sit on the line */
+  margin-top: 10px;
+}
+
+.timeline-content {
+  flex-grow: 1;
 }

@@ -4,7 +4,7 @@ import './ErrorBoundary.css';
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, countdown: 3 };
+    this.state = { hasError: false, countdown: 1 };
   }
 
   static getDerivedStateFromError(error) {

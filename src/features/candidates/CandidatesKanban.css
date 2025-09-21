@@ -232,4 +232,93 @@
   font-size: 0.875rem;
   color: var(--text-secondary);
   word-break: break-all;
+} 
+
+
+/* Add these styles to your CandidatesKanban.css file */
+
+.candidate-job-link-wrapper {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.candidate-job-link {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-accent);
+  background-color: color-mix(in srgb, var(--primary-accent) 15%, transparent);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.candidate-job-link:hover {
+  background-color: var(--primary-accent);
+  color: white;
+  box-shadow: 0 0 10px 0 color-mix(in srgb, var(--primary-accent) 50%, transparent);
+} 
+   
+/* Add this to CandidateProfile.css */
+
+.profile-job-link {
+    color: inherit; /* Inherits the --text-primary color from its parent */
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.profile-job-link:hover {
+    color: var(--primary-accent);
+    text-decoration: underline;
+} 
+/* Add these styles to your CandidateProfile.css file */
+
+.send-mail-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--primary-accent);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  margin-top: 1.5rem; /* Space it from the email address */
+}
+
+.send-mail-btn:hover {
+  background-color: var(--primary-accent-hover);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+} 
+
+/* Add these styles to your CandidateProfile.css */
+
+.timeline-content {
+  position: relative; /* This is required for the pseudo-element to be positioned correctly */
+  background-color: var(--surface-secondary);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  flex-grow: 1;
+}
+
+/* This creates the arrow/triangle shape */
+.timeline-content::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 100%; /* Position it to the left of the content box */
+  margin-top: -8px;
+  border-width: 8px;
+  border-style: solid;
+  /* The border colors create the triangle shape */
+  border-color: transparent var(--surface-secondary) transparent transparent;
 }

@@ -12,6 +12,7 @@ const STAGES = ['applied', 'screen', 'tech', 'offer', 'hired', 'rejected'];
 
 // Mock API call functions
 const fetchCandidates = async () => (await fetch('/candidates')).json();
+const fetchAllJobs = async () => (await fetch('/jobs/all')).json();
 const moveCandidate = async ({ id, stage, notes }) => {
     const res = await fetch(`/candidates/${id}`, {
         method: 'PATCH',
@@ -30,6 +31,11 @@ const CandidatesKanban = () => {
     const { data: candidates, isLoading } = useQuery({
         queryKey: ['candidates'],
         queryFn: fetchCandidates,
+    }); 
+
+    const { data: jobs, isLoading: isLoadingJobs } = useQuery({
+        queryKey: ['allJobs'],
+        queryFn: fetchAllJobs,
     });
 
    const moveMutation = useMutation({
@@ -89,7 +95,11 @@ const CandidatesKanban = () => {
         });
         window.dispatchEvent(event);
     };
-
+   
+     const jobMap = useMemo(() => {
+        if (!jobs) return new Map();
+        return new Map(jobs.map(job => [job.id, job]));
+    }, [jobs]);
 
 
     if (isLoading) return <Loader text="Loading Candidates..." />;
@@ -141,7 +151,16 @@ const CandidatesKanban = () => {
                     <div className="candidate-email">
                         <FiMail size={14} />
                         <span>{c.email}</span>
-                    </div>
+                    </div>  
+                     <div className="candidate-job-link-wrapper">
+            <Link 
+                to={`/jobs/${c.jobId}`} 
+                className="candidate-job-link"
+                onClick={(e) => e.stopPropagation()} // Prevents the main card link from firing
+            >
+                {jobMap.get(c.jobId)?.title || c.jobId}
+            </Link>
+        </div>
                 </div>
             </Link>
                                                         </div>
