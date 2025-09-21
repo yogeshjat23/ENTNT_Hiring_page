@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { Link } from 'react-router-dom';
 import VirtualizedCandidateList from './VirtualizedCandidateList';
+import { FiMail } from 'react-icons/fi';
 import Loader from '../../components/common/Loader'; 
 import NotesModal from './NotesModal';
 import './CandidatesKanban.css';
@@ -129,12 +130,20 @@ const CandidatesKanban = () => {
                                                 <Draggable key={c.id} draggableId={c.id} index={index}>
                                                     {(provided) => (
                                                         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                            <Link to={`/candidates/${c.id}`} className="candidate-card-link">
-                                                                <div className="candidate-card">
-                                                                    <h4>{c.name}</h4>
-                                                                    <p>{c.email}</p>
-                                                                </div>
-                                                            </Link>
+                                                           <Link to={`/candidates/${c.id}`} className="candidate-card-link">
+                <div className="candidate-card">
+                    <div className="card-header">
+                        <div className="candidate-avatar">
+                            {c.name.split(' ').map(n => n[0]).slice(0, 2).join('')}
+                        </div>
+                        <h4 className="candidate-name">{c.name}</h4>
+                    </div>
+                    <div className="candidate-email">
+                        <FiMail size={14} />
+                        <span>{c.email}</span>
+                    </div>
+                </div>
+            </Link>
                                                         </div>
                                                     )}
                                                 </Draggable>

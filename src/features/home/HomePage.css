@@ -1,0 +1,126 @@
+/* === FINAL MODERN HOME PAGE STYLES === */
+
+.home-container-final {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  position: relative;
+  overflow: hidden;
+  padding: 2rem;
+}
+
+/* --- Floating Background Blobs --- */
+@keyframes float-blob {
+  0% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(-20px) translateX(10px); }
+  100% { transform: translateY(0px) translateX(0px); }
+}
+
+.shape-blob {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.7;
+  filter: blur(50px);
+  animation: float-blob 8s ease-in-out infinite;
+}
+
+/* Blob colors and positions */
+.shape-blob.one {
+  width: 400px;
+  height: 400px;
+  top: -100px;
+  left: -100px;
+  background: color-mix(in srgb, var(--primary-accent) 20%, transparent);
+  animation-duration: 10s;
+}
+
+.shape-blob.two {
+  width: 300px;
+  height: 300px;
+  bottom: -50px;
+  right: -50px;
+  background: color-mix(in srgb, var(--status-active) 20%, transparent);
+  animation-duration: 12s;
+  animation-delay: -3s;
+}
+
+.shape-blob.three {
+    width: 250px;
+    height: 250px;
+    top: 50%;
+    left: 40%;
+    background: color-mix(in srgb, var(--status-archived) 15%, transparent);
+    animation-duration: 15s;
+    animation-delay: -6s;
+}
+
+/* --- Hero Content Box --- */
+.hero-content-box {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 3rem 4rem;
+  
+  /* Glassmorphism card effect */
+  background: var(--surface-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  
+  animation: hero-fade-in 1s ease-out;
+}
+
+@keyframes hero-fade-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.hero-title-final {
+  font-size: clamp(3rem, 10vw, 5rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+}
+
+.hero-subtitle-final {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.hero-cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.cta-button {
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  border: 1px solid transparent;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-md);
+}
+.cta-button:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.cta-button.secondary {
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+.cta-button:not(.secondary) {
+  background-color: var(--primary-accent);
+  color: white;
+}

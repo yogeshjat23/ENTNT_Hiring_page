@@ -117,7 +117,7 @@
   
 
 .kanban-column[data-stage="applied"] {
-  background-color: white;
+  background-color: rgb(208, 202, 202);
   border-left: 3px solid gray;
 }
 
@@ -176,4 +176,60 @@
 .light-mode .kanban-column[data-stage="tech"] h3,
 .light-mode .kanban-column[data-stage="offer"] h3 {
   color: var(--text-secondary);
+}
+.candidate-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.candidate-card {
+  background-color: var(--surface-primary);
+ 
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  margin: 0.5rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease-out;
+}
+
+.candidate-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.candidate-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--primary-accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.candidate-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.candidate-email {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  word-break: break-all;
 }

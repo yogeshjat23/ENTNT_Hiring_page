@@ -1,23 +1,74 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, NavLink, Outlet } from 'react-router-dom'; // Make sure Outlet is imported
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, NavLink, Link, Navigate, Outlet } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider, useAuth } from './auth/AuthContext';
 import { useThemeStore } from './store/useThemeStore';
 import ThemeToggle from './components/common/ThemeToggle';
-import JobsBoard from './features/jobs/JobsBoard';
-import CandidatesKanban from './features/candidates/CandidatesKanban';
-import AssessmentBuilder from './features/assessments/AssessmentBuilder';
-import { useJobModalStore } from './store/useJobModalStore';
+import { FiBriefcase, FiUsers, FiClipboard, FiList, FiLogOut, FiLogIn } from 'react-icons/fi';
 import Modal from './components/common/Modal';
 import JobForm from './components/jobs/JobForm';
-import JobDetailsModal from './features/jobs/JobDetailsModal'; // Ensure this is imported
-import CandidateProfile from "./features/candidates/CandidateProfile";
+import { useJobModalStore } from './store/useJobModalStore';
+
+// Page Components
+import HomePage from './features/home/HomePage';
+import LoginPage from './features/login/LoginPage';
+import JobsBoard from './features/jobs/JobsBoard';
+import JobDetailsModal from './features/jobs/JobDetailsModal';
+import CandidatesKanban from './features/candidates/CandidatesKanban';
+import CandidateProfile from './features/candidates/CandidateProfile';
 import AllAssessmentsPage from './features/assessments/AllAssessmentsPage';
 import CreateAssessmentPage from './features/assessments/CreateAssessmentPage';
-import './App.css';
+import AssessmentBuilder from './features/assessments/AssessmentBuilder';
 
+import './App.css';
 
 const queryClient = new QueryClient();
 
+// --- Unified App Layout (Handles both public and private states) ---
+const AppLayout = () => {
+  const { user, isLoggedIn, logout } = useAuth();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  return (
+    <div className="App">
+      <nav>
+        <div className="nav-left">
+          <h1><Link to="/" className="home-link">TalentFlow</Link></h1>
+          {isLoggedIn && (
+            <>
+              <NavLink to="/jobs"><FiBriefcase /><span>Jobs</span></NavLink>
+              <NavLink to="/candidates"><FiUsers /><span>Candidates</span></NavLink>
+              <NavLink to="/assessments/new"><FiClipboard /><span>Create Assessment</span></NavLink>
+              <NavLink to="/assessments" end><FiList /><span>All Assessments</span></NavLink>
+            </>
+          )}
+        </div>
+        <div className="nav-right">
+          <ThemeToggle />
+          {isLoggedIn ? (
+            <div className="profile-section">
+              <button className="profile-button" onClick={() => setIsDropdownOpen(prev => !prev)}>
+                {user?.initials || 'U'}
+              </button>
+              {isDropdownOpen && (
+                <div className="profile-dropdown">
+                  <div className="dropdown-header">Signed in as <br/> <strong>{user?.name || 'User'}</strong></div>
+                  <button onClick={logout} className="dropdown-item logout-item"><FiLogOut /><span>Logout</span></button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link to="/login" className="login-nav-button"><FiLogIn/><span>Login</span></Link>
+          )}
+        </div>
+      </nav>
+      <main><Outlet /></main>
+     
+    </div>
+  );
+};
+
+// --- Main App Component ---
 function App() {
   const theme = useThemeStore((state) => state.theme);
   const { isOpen, jobToEdit, closeModal } = useJobModalStore();
@@ -30,54 +81,43 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <div className="App">
-          <nav>
-            <h1>TalentFlow</h1>
-            <NavLink to="/jobs">Jobs</NavLink>
-            <NavLink to="/candidates">Candidates</NavLink> 
-            <NavLink to = "/assessments/new" > Create Assessment </NavLink> 
-              <NavLink to="/assessments" end>All Assessments</NavLink>
-            <ThemeToggle />
-          </nav>
-
-          <main>
-            <Routes>
-              {/* The JobDetailsModal route is no longer nested here */}
-            
-              <Route path="/" element={<JobsBoard />} />
-              <Route path="/jobs" element={<JobsBoard />} />
-              <Route path="/candidates" element={<CandidatesKanban />} />
-              <Route path="/candidates/:id" element={<CandidateProfile />} />
-                  <Route path="/assessments" element={<AllAssessmentsPage />} />
-                  < Route path = "/assessments/new" element = {<CreateAssessmentPage/>}/>
-              <Route path="/assessments/:jobId" element={<AssessmentBuilder />} />
-              
-            </Routes>
-          </main>
-
-          {/* This Outlet will render routes that should appear OVER the main content */}
+        <AuthProvider>
           <Routes>
-              <Route path="/jobs/:jobId" element={<JobDetailsModal />} />
+            {/* All pages now use the smart AppLayout */}
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              
+              {/* Protected Routes are nested here */}
+              <Route path="/jobs" element={<ProtectedRoute><JobsBoard /></ProtectedRoute>} />
+              <Route path="/candidates" element={<ProtectedRoute><CandidatesKanban /></ProtectedRoute>} />
+              <Route path="/candidates/:id" element={<ProtectedRoute><CandidateProfile /></ProtectedRoute>} />
+              <Route path="/assessments" element={<ProtectedRoute><AllAssessmentsPage /></ProtectedRoute>} />
+              <Route path="/assessments/new" element={<ProtectedRoute><CreateAssessmentPage /></ProtectedRoute>} />
+              <Route path="/assessments/:jobId" element={<ProtectedRoute><AssessmentBuilder /></ProtectedRoute>} />
+            </Route>
+
+            {/* Top-level modal route also needs protection */}
+            <Route path="/jobs/:jobId" element={<ProtectedRoute><JobDetailsModal /></ProtectedRoute>} />
+            
+            {/* Fallback for unknown routes */}
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
           
-          {/* The Create/Edit modal is rendered based on Zustand state, which is fine */}
+          {/* Create/Edit Job Modal remains at the top level */}
           <Modal isOpen={isOpen} onClose={closeModal} title={jobToEdit ? 'Edit Job' : 'Create New Job'}>
             <JobForm />
           </Modal>
-        </div>
+        </AuthProvider>
       </Router>
     </QueryClientProvider>
   );
 }
 
-// A layout component to handle nested routes if you want to bring that back later
-// For now, the simpler structure above is better.
-const JobsLayout = () => (
-    <>
-      <JobsBoard />
-      <Outlet />
-    </>
-);
-
+// ProtectedRoute Wrapper (no changes needed)
+const ProtectedRoute = ({ children }) => {
+  const { isLoggedIn } = useAuth();
+  return isLoggedIn ? children : <Navigate to="/login" replace />;
+};
 
 export default App;
