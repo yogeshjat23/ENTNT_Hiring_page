@@ -3,27 +3,33 @@
   margin: auto;
 }
 
-.assessment-grid-item {
+.assessments-list {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  column-gap: 1.5rem;
-  row-gap: 4.6rem;
+  gap: 1.5rem;
 }
 
 @media (max-width: 1024px) {
-  .assessment-grid-item {
+  .assessments-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .assessment-grid-item {
+  .assessments-list {
     grid-template-columns: 1fr;
   }
 }
 
+/* This is the grid item */
+.assessment-grid-item {
+  display: flex; /* This ensures the card inside can stretch to full height */
+}
+
 .assessment-card-link {
   text-decoration: none;
+  width: 100%;
+  display: flex;
 }
 
 .assessment-card {
@@ -35,8 +41,7 @@
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   transition: all 0.2s ease-out;
-  height: 100%;
-  align-self: stretch;
+  width: 100%;
 }
 
 .assessment-card:hover {
@@ -49,6 +54,13 @@
   color: var(--text-primary);
   margin: 0;
   font-size: 1.2rem;
+}
+
+/* Style for the Job ID to be smaller */
+.assessment-card h3.job-id {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: normal;
 }
 
 .assessment-card p {

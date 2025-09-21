@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { Link } from 'react-router-dom';
 import VirtualizedCandidateList from './VirtualizedCandidateList';
+import Loader from '../../components/common/Loader'; 
 import NotesModal from './NotesModal';
 import './CandidatesKanban.css';
 
@@ -90,7 +91,7 @@ const CandidatesKanban = () => {
 
 
 
-    if (isLoading) return <div>Loading candidates...</div>;
+    if (isLoading) return <Loader text="Loading Candidates..." />;
 
     return (
         <div className="kanban-board">

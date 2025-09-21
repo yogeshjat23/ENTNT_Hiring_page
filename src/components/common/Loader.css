@@ -1,0 +1,47 @@
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.spinner-box {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: spinner-spin 4s infinite linear;
+}
+
+@keyframes spinner-spin {
+  0% { transform: rotateY(0deg) rotateX(0deg); }
+  100% { transform: rotateY(360deg) rotateX(360deg); }
+}
+
+.cube-face {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border: 2px solid var(--primary-accent);
+  background-color: color-mix(in srgb, var(--primary-accent) 15%, transparent);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--primary-accent) 50%, transparent);
+  border-radius: 4px;
+}
+
+/* Position each face of the cube in 3D space */
+.front  { transform: translateZ(25px); }
+.back   { transform: rotateY(180deg) translateZ(25px); }
+.top    { transform: rotateX(90deg) translateZ(25px); }
+.bottom { transform: rotateX(-90deg) translateZ(25px); }
+.left   { transform: rotateY(-90deg) translateZ(25px); }
+.right  { transform: rotateY(90deg) translateZ(25px); }
+
+.loader-text {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}

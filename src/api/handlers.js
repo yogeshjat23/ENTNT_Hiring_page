@@ -31,6 +31,11 @@ const withNetwork = (res, ctx, data, {
 };
 
 export const handlers = [
+
+  rest.get('/jobs/all', async (req, res, ctx) => {
+    const allJobs = await db.jobs.orderBy('order').toArray();
+    return withNetwork(res, ctx, allJobs);
+}),
  rest.get('/jobs', async (req, res, ctx) => {
     const search = req.url.searchParams.get('search') || '';
     const tagSearch = req.url.searchParams.get('tagSearch') || '';

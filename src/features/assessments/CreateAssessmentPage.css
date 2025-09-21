@@ -40,4 +40,30 @@
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     box-sizing: border-box;
+} 
+
+/* Add these to the bottom of the file */
+
+.create-assessment-box label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.create-assessment-box select {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 1rem;
+    background-color: var(--surface-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+}
+
+.or-divider {
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin: 0.5rem 0;
 }

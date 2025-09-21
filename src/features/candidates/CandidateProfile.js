@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import Loader from '../../components/common/Loader';
 import { format } from 'date-fns';
 import './CandidateProfile.css';
 
@@ -29,9 +30,9 @@ export default function CandidateProfile() {
     queryFn: () => fetchTimeline(id),
   });
 
-  if (isCandidateLoading || isTimelineLoading) {
-    return <div className="profile-status">Loading candidate profile...</div>;
-  }
+ if (isCandidateLoading || isTimelineLoading) {
+    return <Loader text="Loading Candidate Profile..." />;
+}
 
   if (isCandidateError || isTimelineError) {
     return <div className="profile-status error">Could not load candidate details.</div>;

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet  , useNavigate  } from 'react-router-dom';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useJobModalStore } from '../../store/useJobModalStore';
-import Modal from '../../components/common/Modal';
-import JobForm from '../../components/jobs/JobForm';
 import JobItemCard from '../../components/jobs/JobItemCard';
 import Pagination from '../../components/common/Pagination';
+import Loader from '../../components/common/Loader';
 import './JobsBoard.css';
 
 // --- API Call Functions ---
@@ -59,7 +58,8 @@ const reorderJobs = async (reorderData) => {
 };
 
 
-const JobsBoard = () => {
+const JobsBoard = () => { 
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [titleFilter, setTitleFilter] = useState('');
     const [tagFilter, setTagFilter] = useState('');
@@ -168,7 +168,7 @@ const JobsBoard = () => {
                 />
             </div>
 
-            {isLoading && <div>Loading...</div>}
+            {isLoading &&  <Loader text="Loading Jobs..." />}
             {isError && <div>Error fetching jobs.</div>}
 
             {/* --- ACTIVE JOBS SECTION --- */}
@@ -197,6 +197,8 @@ const JobsBoard = () => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="job-actions">
+                                                                    <button onClick={(e) => {  e.preventDefault(); navigate(`/assessments/${job.id}`);  }} className="action-btn edit" >
+                                                                     Assessment </button>
                                                                     <button onClick={(e) => { e.preventDefault(); archiveMutation.mutate({ id: job.id, status: 'archived' }); }} className="action-btn archive">Archive</button>
                                                                     <button onClick={(e) => { e.preventDefault(); handleOpenModal(job); }} className="action-btn edit">Edit</button>
                                                                 </div>
@@ -235,7 +237,9 @@ const JobsBoard = () => {
                                                 <span>{job.tags.join(' / ')}</span>
                                             </div>
                                         </div>
-                                        <div className="job-actions">
+                                        <div className="job-actions"> 
+                                             <button onClick={(e) => {  e.preventDefault(); navigate(`/assessments/${job.id}`);  }} className="action-btn edit" >
+                                                                     Assessment </button>
                                             <button onClick={(e) => { e.preventDefault(); archiveMutation.mutate({ id: job.id, status: 'active' }); }} className="action-btn unarchive">Unarchive</button>
                                             <button onClick={(e) => { e.preventDefault(); handleOpenModal(job); }} className="action-btn edit">Edit</button>
                                         </div>

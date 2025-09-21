@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAssessmentStore } from '../../store/useAssessmentStore';
 import BuilderPane from './BuilderPane';
 import FormPreview from './FormPreview';
+import Loader from '../../components/common/Loader';
 import './AssessmentBuilder.css';
 
 // API Calls
@@ -57,9 +58,9 @@ export default function AssessmentBuilder() {
     alert('Assessment saved successfully!');
   };
 
-  if (isLoading || !assessment?.sections) {
-    return <div className="loading-pane">Loading assessment builder...</div>;
-  }
+if (isLoading || !assessment?.sections) {
+    return <Loader text="Loading Assessment Builder..." />;
+}
 
   return (
     <div className="assessment-builder-layout">
