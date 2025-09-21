@@ -192,7 +192,7 @@ const JobsBoard = () => {
                                                                 <div className="job-card-main">
                                                                     <h3 className="job-title">{job.title}</h3>
                                                                     <div className="job-location">
-                                                                        <span>📍</span>
+                                                                        <span>💻</span>
                                                                         <span>{job.tags.join(' / ')}</span>
                                                                     </div>
                                                                 </div>
