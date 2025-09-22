@@ -37,7 +37,28 @@ export default function CandidateProfile() {
   const jobMap = useMemo(() => {
     if (!jobs) return new Map();
     return new Map(jobs.map(job => [job.id, job.title]));
-  }, [jobs]);
+  }, [jobs]); 
+
+  const generateColor = (name = '') => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  // CORRECTED: Use a template literal with backticks ``
+  const color = `hsl(${hash % 360}, 75%, 60%)`;
+  return color;
+}; 
+const getInitials = (name = '') => {
+  const allNames = name.trim().split(' ');
+  const initials = allNames.reduce((acc, curr, index) => {
+    if (index === 0 || index === allNames.length - 1) {
+      // CORRECTED: Use proper string concatenation
+      acc = `${acc}${curr.charAt(0).toUpperCase()}`;
+    }
+    return acc;
+  }, '');
+  return initials;
+};
 
   const isLoading = isCandidateLoading || isTimelineLoading || areJobsLoading;
 
@@ -46,7 +67,10 @@ export default function CandidateProfile() {
   }
 
   const appliedEvent = timeline.find(event => event.stage.toLowerCase() === 'applied');
-  const jobTitle = jobMap.get(candidate?.jobId) || 'Not Assigned';
+  const jobTitle = jobMap.get(candidate?.jobId) || 'Not Assigned'; 
+
+  const backgroundColor = generateColor(candidate.name);
+   const initials = getInitials(candidate.name);
 
   return (
     <div className="candidate-profile-layout">
@@ -70,8 +94,8 @@ export default function CandidateProfile() {
                 <FiUser />
                 <span>Candidate Information</span>
             </h3>
-            <div className="avatar">
-                {candidate.name.substring(0, 2).toUpperCase()}
+            <div className="avatar"  style={{ backgroundColor }} >
+                {initials}
             </div>
             <p className="candidate-name">{candidate.name}</p>
             <p className="candidate-email">{candidate.email}</p> 

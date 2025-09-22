@@ -1,7 +1,9 @@
 // src/components/VirtualizedCandidateList.js
 import React, { useState, useMemo } from "react";
 import { List, AutoSizer } from "react-virtualized";
-import { Link } from "react-router-dom";
+import { FiMail  } from 'react-icons/fi';
+import { Link } from "react-router-dom"; 
+import ProfileAvatar from "./AvatarPage";
 import "./VirtualizedCandidateList.css";
 
 
@@ -31,10 +33,21 @@ export default function VirtualizedCandidateList({ candidates = [] }) {
 
     return (
       <div key={key} style={style} className="candidate-row">
-        <Link to={`/candidates/${candidate.id}`} className="candidate-link">
-          <div className="candidate-info">
-            <strong>{candidate.name}</strong>
-            <p>{candidate.email}</p>
+        <Link to={`/candidates/${candidate.id}`} className="candidate-link"> 
+           
+          <div className="candidate-info1"> 
+             <div className="card-header1">
+                       <ProfileAvatar name={candidate.name} />
+                        <h4 className="candidate-name1">{candidate.name}</h4>  
+
+                         <div className="candidate-email1"> 
+                 <FiMail size={14} />
+                                   <span>{candidate.email } </span>
+                               </div> 
+                      
+                    </div> 
+                   
+           
           </div>
           <span className="candidate-stage">{candidate.stage}</span>
         </Link>

@@ -1,4 +1,4 @@
-/* === VIRTUALIZED CANDIDATE LIST STYLES === */ 
+/* === VIRTUALIZED CANDIDATE LIST STYLES === */
 /* === FILTER SECTION === */
 .filter-section {
   display: flex;
@@ -59,12 +59,14 @@
 
 
 .list-container {
-  height: 600px; /* Default height for the list */
+  height: 600px;
+  /* Default height for the list */
   width: 100%;
   background-color: var(--surface-primary);
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
-  overflow: hidden; /* Important for border-radius */
+  overflow: hidden;
+  /* Important for border-radius */
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
 }
@@ -73,7 +75,8 @@
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
-  box-sizing: border-box; /* Ensures padding is included in height */
+  box-sizing: border-box;
+  /* Ensures padding is included in height */
 }
 
 .candidate-link {
@@ -92,7 +95,7 @@
   background-color: var(--surface-secondary);
 }
 
-.candidate-info {
+.candidate-info1 {
   display: flex;
   flex-direction: column;
 }
@@ -116,19 +119,58 @@
   color: var(--primary-accent);
   background-color: color-mix(in srgb, var(--primary-accent) 15%, transparent);
   padding: 6px 12px;
-  border-radius: 9999px; /* Pill shape */
+  border-radius: 9999px;
+  /* Pill shape */
 }
 
 /* Style for the message when no candidates are found */
 .virtual-list-empty {
-    padding: 2rem;
-    text-align: center;
-    color: var(--text-secondary);
-    background-color: var(--surface-primary);
-    border-radius: var(--border-radius);
-    height: 600px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-style: italic;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+  background-color: var(--surface-primary);
+  border-radius: var(--border-radius);
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: italic;
+}
+
+.candidate-name1 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.candidate-email1 { 
+  margin-bottom:10px ;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+.card-header1 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.candidate-avatar1 {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--primary-accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 10px;
 }

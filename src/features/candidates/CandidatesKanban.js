@@ -2,7 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { Link } from 'react-router-dom';
-import VirtualizedCandidateList from './VirtualizedCandidateList';
+import VirtualizedCandidateList from './VirtualizedCandidateList'; 
+import ProfileAvatar from './AvatarPage';
 import { FiMail  } from 'react-icons/fi';
 import Loader from '../../components/common/Loader'; 
 import NotesModal from './NotesModal';
@@ -144,10 +145,8 @@ const CandidatesKanban = () => {
                                                         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                                            <Link to={`/candidates/${c.id}`} className="candidate-card-link">
                 <div className="candidate-card">
-                    <div className="card-header">
-                        <div className="candidate-avatar">
-                            {c.name.split(' ').map(n => n[0]).slice(0, 2).join('')}
-                        </div>
+                    <div className="card-header"> 
+                        <ProfileAvatar name={c.name}/>
                         <h4 className="candidate-name">{c.name}</h4>
                     </div>
                     <div className="candidate-email">

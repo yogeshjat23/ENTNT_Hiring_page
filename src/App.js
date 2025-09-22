@@ -4,14 +4,16 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import { useThemeStore } from './store/useThemeStore';
 import ThemeToggle from './components/common/ThemeToggle';
-import { FiBriefcase, FiUsers, FiClipboard, FiList, FiLogOut, FiLogIn  ,FiRefreshCw } from 'react-icons/fi';
+import {FiGrid  , FiBriefcase, FiUsers, FiClipboard, FiList, FiLogOut, FiLogIn  ,FiRefreshCw } from 'react-icons/fi';
 import Modal from './components/common/Modal';
 import JobForm from './components/jobs/JobForm';
-import { useJobModalStore } from './store/useJobModalStore';
+import { useJobModalStore } from './store/useJobModalStore'; 
+
 
 // Page Components 
 
 import ErrorBoundary from './components/common/ErrorBoundary';
+import DashboardPage from './features/dashboard/DashboardPage';
 import HomePage from './features/home/HomePage';
 import LoginPage from './features/login/LoginPage';
 import JobsBoard from './features/jobs/JobsBoard';
@@ -49,6 +51,7 @@ const AppLayout = () => {
           {isLoggedIn && (
             <>
               <NavLink to="/jobs"><FiBriefcase /><span>Jobs</span></NavLink>
+               <NavLink to="/dashboard"><FiGrid /><span>Dashboard</span></NavLink>
               <NavLink to="/candidates"><FiUsers /><span>Candidates</span></NavLink>
               <NavLink to="/assessments/new"><FiClipboard /><span>Create Assessment</span></NavLink>
               <NavLink to="/assessments" end><FiList /><span>All Assessments</span></NavLink>
@@ -110,7 +113,8 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               
-              {/* Protected Routes are nested here */}
+              {/* Protected Routes are nested here */} 
+                <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/jobs" element={<ProtectedRoute><JobsBoard /></ProtectedRoute>} />
               <Route path="/candidates" element={<ProtectedRoute><CandidatesKanban /></ProtectedRoute>} />
               <Route path="/candidates/:id" element={<ProtectedRoute><CandidateProfile /></ProtectedRoute>} />

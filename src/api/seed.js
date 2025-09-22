@@ -1,4 +1,7 @@
-import { db } from './db';
+import { db } from './db'; 
+import { formatISO } from 'date-fns';
+import {faker} from '@faker-js/faker';
+ 
 
 // This function seeds the database if it's empty.
 export async function seedDatabase() {
@@ -24,22 +27,31 @@ export async function seedDatabase() {
   await db.jobs.bulkAdd(jobs);
 
   // Seed Candidates
-  const candidates = [];
-  const stages = ['applied', 'screen', 'tech', 'offer', 'hired', 'rejected'];
+    const candidates = [];
+  const stages = ["applied", "screen", "tech", "offer", "hired", "rejected"];
   for (let i = 0; i < 1000; i++) {
     const stage = stages[i % stages.length];
+    const candidateId = `cand-${i + 1}`;
+    
+    // Combine a random first and last name
+     const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
+    const fullName = `${firstName} ${lastName}`;
+
     candidates.push({
-      id: `cand-${i + 1}`,
-      name: `Candidate ${i + 1}`,
-      email: `candidate${i + 1}@example.com`,
+      id: candidateId,
+      name: fullName, // Use the new realistic name
+      email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${i}@example.com`, // Create a matching email
       jobId: `job-${(i % 25) + 1}`,
       stage: stage,
     });
-    // Add a timeline entry for the initial stage
+    
+    // Add initial timeline entry
     await db.candidateTimeline.add({
-      candidateId: `cand-${i + 1}`,
-      stage: stage,
-      timestamp: new Date().toISOString(),
+        candidateId,
+        stage,
+        timestamp: formatISO(new Date()),
+        notes: 'Initial application received.'
     });
   }
   await db.candidates.bulkAdd(candidates);
