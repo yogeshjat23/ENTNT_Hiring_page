@@ -2,7 +2,8 @@ import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { FiUser, FiClock, FiArrowLeft, FiBriefcase  , FiMail , FiArrowRightCircle } from 'react-icons/fi';
+import { FiUser, FiClock, FiArrowLeft, FiBriefcase  , FiMail , FiArrowRightCircle } from 'react-icons/fi'; 
+import imgpath from './download.jpeg'
 import Loader from '../../components/common/Loader';
 import NotesSection from './NotesSection';
 import './CandidateProfile.css';
@@ -93,9 +94,10 @@ const getInitials = (name = '') => {
             <h3 className="card-title">
                 <FiUser />
                 <span>Candidate Information</span>
-            </h3>
-            <div className="avatar"  style={{ backgroundColor }} >
-                {initials}
+            </h3> 
+           
+            <div className="avatar"  style={{ backgroundColor }} > 
+                <img  src={imgpath}/>
             </div>
             <p className="candidate-name">{candidate.name}</p>
             <p className="candidate-email">{candidate.email}</p> 

@@ -179,4 +179,9 @@
 
 .timeline-content {
   flex-grow: 1;
+} 
+.avatar img{
+  height: 100px; 
+  width: 120px; 
+  border-radius: 50%;
 }

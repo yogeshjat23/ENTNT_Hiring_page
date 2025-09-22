@@ -50,8 +50,9 @@ const AppLayout = () => {
           <h1><Link to="/" className="home-link">TalentFlow</Link></h1>
           {isLoggedIn && (
             <>
-              <NavLink to="/jobs"><FiBriefcase /><span>Jobs</span></NavLink>
+             
                <NavLink to="/dashboard"><FiGrid /><span>Dashboard</span></NavLink>
+                <NavLink to="/jobs"><FiBriefcase /><span>Jobs</span></NavLink>
               <NavLink to="/candidates"><FiUsers /><span>Candidates</span></NavLink>
               <NavLink to="/assessments/new"><FiClipboard /><span>Create Assessment</span></NavLink>
               <NavLink to="/assessments" end><FiList /><span>All Assessments</span></NavLink>
