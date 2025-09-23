@@ -1,6 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+   "homepage": "https://yogeshjat23.github.io/haring_page/",
   "private": true,
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
