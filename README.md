@@ -1,12 +1,5 @@
 🚀 TalentFlow – Modern Hiring & Assessment Platform (Front-End)
 
-
-
-
-
-
-
-
 📋 Overview
 
 TalentFlow is a front-end-only React application that simulates a modern hiring management platform for HR teams.
@@ -87,20 +80,20 @@ Data Generation: @faker-js/faker
 
 📂 Project Structure
 src/
-├── api/         # MSW handlers & Dexie.js DB setup
-├── auth/        # Authentication context & logic
-├── components/  # Reusable UI (Modal, Loader, etc.)
-├── features/    # Jobs, Candidates, Assessments, Dashboard
-├── hooks/       # Custom hooks (e.g., useDebounce)
-├── store/       # Zustand state stores
-└── App.js       # Main layout & routing
+├── api/ # MSW handlers & Dexie.js DB setup
+├── auth/ # Authentication context & logic
+├── components/ # Reusable UI (Modal, Loader, etc.)
+├── features/ # Jobs, Candidates, Assessments, Dashboard
+├── hooks/ # Custom hooks (e.g., useDebounce)
+├── store/ # Zustand state stores
+└── App.js # Main layout & routing
 
 🔄 Data Flow
 graph TB
-    subgraph Browser
-        UI[React Components]
-        IndexedDB[(Dexie.js DB)]
-    end
+subgraph Browser
+UI[React Components]
+IndexedDB[(Dexie.js DB)]
+end
 
     subgraph State Management
         RQ[React Query]
@@ -138,13 +131,11 @@ git clone <your-repo-link>
 cd talentflow
 npm install
 
-
 Run locally:
 
 npm start
 
-
-Open in browser → http://localhost:3000
+Open in browser → https://talentflow-zeta.vercel.app/
 
 🔑 Login Credentials
 
