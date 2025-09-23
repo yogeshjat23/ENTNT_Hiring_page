@@ -1,58 +1,177 @@
-# TalentFlow - A Mini Hiring Platform
+🚀 TalentFlow – Modern Hiring & Assessment Platform (Front-End)
 
-This is a front-end-only React application built to simulate a hiring management platform for an HR team. It features job management, candidate tracking through a Kanban pipeline, and a dynamic assessment builder.
 
-**Live Deployed App:** [Link to your deployed app on Vercel/Netlify]
 
-**GitHub Repository:** [Link to your GitHub repo]
 
-## Features
 
-* **Jobs Board:** Create, edit, archive, and reorder jobs via drag-and-drop with optimistic UI updates and error rollback.
-* **Candidate Pipeline:** Manage candidates in a Kanban board, moving them between stages like Applied, Screen, Tech, and Offer.
-* **Assessment Builder:** Dynamically create job-specific quizzes with multiple question types and a live preview pane.
-* **Local Persistence:** All data is persisted locally in your browser using IndexedDB, so your state is saved on refresh.
-* **Mock API:** A simulated REST API using Mock Service Worker (MSW) provides realistic network latency and occasional errors to test robustness.
 
-## Tech Stack
 
-* **Framework:** React
-* **State Management:** React Query (for server state) & Zustand (for global UI state)
-* **Routing:** React Router v6
-* **Drag & Drop:** React Beautiful DnD
-* **Virtualization:** React Window
-* **API Mocking:** Mock Service Worker (MSW)
-* **Local Database:** Dexie.js (IndexedDB Wrapper)
-* **Styling:** Plain CSS with a component-based methodology.
 
-## Getting Started
+📋 Overview
 
-### Prerequisites
+TalentFlow is a front-end-only React application that simulates a modern hiring management platform for HR teams.
+It provides tools to manage jobs, track candidates, build assessments, and visualize hiring metrics – all with a realistic mock backend powered by MSW and persistent local storage via IndexedDB.
 
-* Node.js (v16 or later)
-* npm or yarn
+This project was built as a technical assignment with a strong emphasis on:
 
-### Installation & Setup
+High-quality user experience 🎨
 
-1.  **Clone the repository:**
-    ```bash
-    git clone [your-repo-link]
-    cd talentflow
-    ```
+Robust state management ⚡
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+Scalable, modular architecture 🏗️
 
-3.  **Run the development server:**
-    ```bash
-    npm start
-    ```
-    The application will be available at `http://localhost:3000`. The MSW mock server will start automatically in development mode.
+✨ Features
+🏠 Home & Dashboard
 
-## Architectural Decisions
+🎥 Animated 3D Landing Page showcasing the hiring journey
 
-* **State Management:** I chose **React Query** to manage all interactions with the mock API. Its caching, automatic refetching, and mutation helpers (like `onMutate` for optimistic updates) are perfect for handling asynchronous server state. For simple, global UI state (like a modal's open/close status), a lightweight library like **Zustand** would be ideal to avoid prop drilling without the boilerplate of Redux.
-* **API Mocking & Persistence:** **MSW** was chosen because it intercepts requests at the network level, making the application code completely unaware that it's talking to a mock server. This makes transitioning to a real API seamless. **Dexie.js** provides a friendly, promise-based API on top of the verbose IndexedDB, making client-side storage clean and easy to manage. MSW handlers write through to the Dexie database to ensure persistence.
-* **Component Structure:** The code is organized by features (`/features`) and further broken down into reusable `components`. This makes the codebase modular and scalable. Custom hooks (`/hooks`) are used to encapsulate and reuse logic (e.g., `useJobs`, `useCandidates`).
+📊 Data-driven dashboard with interactive charts (Recharts)
+
+🔐 Authentication & Protected Routes with hardcoded HR credentials
+
+💼 Jobs Board
+
+🔎 Filter & Paginate jobs with debounced search
+
+➕ Create / Edit Jobs in smooth modal forms (with validation)
+
+📦 Archive / Unarchive jobs in collapsible sections
+
+🎯 Drag-and-Drop Reordering with optimistic UI + error rollback
+
+🔗 Deep Linking: each job accessible via /jobs/:id
+
+👥 Candidates Pipeline
+
+🗂️ Dual Views: Kanban board & high-performance virtualized list
+
+🔍 Instant Search & Filter for 1000+ candidates
+
+📄 Detailed Candidate Profiles with timeline & linked job info
+
+📝 Notes with @mentions to simulate collaboration
+
+🧑‍🎨 Randomized Avatars for realism
+
+📝 Assessments
+
+🏗️ Dynamic Form Builder: add sections, multiple question types
+
+👀 Live Preview: real-time form rendering while editing
+
+✅ Validation & Conditional Logic
+
+💾 Local Persistence with IndexedDB
+
+🛠️ Tech Stack
+
+Framework: React (CRA)
+
+State Management: React Query + Zustand
+
+Routing: React Router v6
+
+Mock API: MSW (Mock Service Worker)
+
+Local DB: Dexie.js (IndexedDB)
+
+Styling: CSS with variables (Light & Dark modes)
+
+Drag & Drop: @hello-pangea/dnd
+
+Virtualization: react-window
+
+Data Viz: Recharts
+
+Data Generation: @faker-js/faker
+
+📂 Project Structure
+src/
+├── api/         # MSW handlers & Dexie.js DB setup
+├── auth/        # Authentication context & logic
+├── components/  # Reusable UI (Modal, Loader, etc.)
+├── features/    # Jobs, Candidates, Assessments, Dashboard
+├── hooks/       # Custom hooks (e.g., useDebounce)
+├── store/       # Zustand state stores
+└── App.js       # Main layout & routing
+
+🔄 Data Flow
+graph TB
+    subgraph Browser
+        UI[React Components]
+        IndexedDB[(Dexie.js DB)]
+    end
+
+    subgraph State Management
+        RQ[React Query]
+        Zustand[Zustand Stores]
+    end
+
+    subgraph Mock Backend
+        MSW[Mock Service Worker]
+    end
+
+    UI -- "Render & Trigger Actions" --> RQ
+    UI -- "Global UI State (modals, theme)" --> Zustand
+    RQ -- "Fetch & Cache Data" --> MSW
+    MSW -- "Reads/Writes" --> IndexedDB
+
+🤔 Why These Choices?
+
+React Query > Redux
+Optimized for server state, caching, optimistic updates & retries → no boilerplate.
+
+Zustand > Redux/Context
+Lightweight store for global UI state (theme, modals) → minimal & fast.
+
+MSW > JSON Server
+No extra server needed, intercepts requests in-browser → realistic mock API.
+
+Dexie.js > LocalStorage
+IndexedDB wrapper: handles complex objects & scales to 1000+ records efficiently.
+
+🚀 Getting Started
+
+Clone & install:
+
+git clone <your-repo-link>
+cd talentflow
+npm install
+
+
+Run locally:
+
+npm start
+
+
+Open in browser → http://localhost:3000
+
+🔑 Login Credentials
+
+Username: hr
+
+Password: password123
+
+🌍 Live Demo → TalentFlow on Vercel
+
+🐛 Known Issues
+
+Initial Data Loading: Candidate list queries all jobs (could be optimized with better backend design).
+
+Error Handling: Simple error boundary → would need Sentry/LogRocket in production.
+
+Single User Only: Local storage → no real-time collaboration yet.
+
+🚧 Future Improvements
+
+Real-time multi-user backend (e.g., Firebase, WebSocket)
+
+Cloud persistence (replace Dexie.js with real DB)
+
+Richer analytics & dashboard widgets
+
+Better role-based access & HR team collaboration
+
+📜 License
+
+This project is licensed under the MIT License.
