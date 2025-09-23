@@ -17,16 +17,18 @@ const HomePage = () => {
           <span>Apply</span>
         </div>
         <div className="stage-zone assess-zone">
-          <FiClipboard size={30} />
-          <span>Assess</span>
-        </div>
-        <div className="stage-zone interview-zone">
           <FiUsers size={30} />
+        
           <span>Interview</span>
         </div>
+        <div className="stage-zone interview-zone">
+           <FiAward size={30} /> 
+          <span> Hired </span>
+        </div>
         <div className="stage-zone hired-zone">
-          <FiAward size={30} />
-          <span>Hired</span>
+         
+            <FiClipboard size={30} />
+          <span>Assessment</span>
         </div>
       </div>
 
