@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, NavLink, Link, Navigate, Outlet } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, NavLink, Link, Navigate, Outlet } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import { useThemeStore } from './store/useThemeStore';
