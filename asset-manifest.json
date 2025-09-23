@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/haring_page/static/css/main.99753877.css",
+    "main.js": "/haring_page/static/js/main.e800d392.js",
+    "index.html": "/haring_page/index.html",
+    "main.99753877.css.map": "/haring_page/static/css/main.99753877.css.map",
+    "main.e800d392.js.map": "/haring_page/static/js/main.e800d392.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.99753877.css",
+    "static/js/main.e800d392.js"
+  ]
+}
