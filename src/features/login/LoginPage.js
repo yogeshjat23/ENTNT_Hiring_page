@@ -3,8 +3,8 @@ import { useAuth } from '../../auth/AuthContext';
 import './LoginPage.css';
 
 const LoginPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+   const [username, setUsername] = useState('hr');
+  const [password, setPassword] = useState('hr123');
   const [error, setError] = useState('');
   const { login } = useAuth();
 
