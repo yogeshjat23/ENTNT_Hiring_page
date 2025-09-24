@@ -56,8 +56,19 @@ export async function seedDatabase() {
   // Seed Candidates
     const candidates = [];
   const stages = ["applied", "screen", "tech", "offer", "hired", "rejected"];
-  for (let i = 0; i < 1000; i++) {
-    const stage = stages[i % stages.length];
+  const stageWeights = {
+  applied: 40,   
+  screen: 20,    
+  tech: 15,     
+  rejected: 15,  
+  offer: 7,    
+  hired: 3,   
+}; 
+const weightedStages = Object.entries(stageWeights).flatMap(([stage, weight]) => 
+  Array(weight).fill(stage)
+);
+  for (let i = 0; i < 1000; i++) { 
+     const stage = weightedStages[Math.floor(Math.random() * weightedStages.length)];
     const candidateId = `cand-${i + 1}`;
     
      const firstName = faker.person.firstName();
