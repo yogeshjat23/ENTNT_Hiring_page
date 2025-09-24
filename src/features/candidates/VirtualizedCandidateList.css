@@ -1,5 +1,4 @@
-/* === VIRTUALIZED CANDIDATE LIST STYLES === */
-/* === FILTER SECTION === */
+
 .filter-section {
   display: flex;
   align-items: center;
@@ -7,7 +6,7 @@
   margin-bottom: 16px;
 }
 
-/* Search bar */
+
 .filter-section input[type="text"] {
   flex: 1;
   padding: 10px 14px;
@@ -31,7 +30,6 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-accent) 25%, transparent);
 }
 
-/* Filter dropdown */
 .filter-section select {
   padding: 10px 14px;
   border: 1px solid var(--border-color);
@@ -51,7 +49,7 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-accent) 25%, transparent);
 }
 
-/* Optional: dropdown arrow fix for consistency */
+
 .filter-section select option {
   background-color: var(--surface-primary);
   color: var(--text-primary);
@@ -60,13 +58,11 @@
 
 .list-container {
   height: 600px;
-  /* Default height for the list */
   width: 100%;
   background-color: var(--surface-primary);
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
   overflow: hidden;
-  /* Important for border-radius */
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
 }
@@ -76,7 +72,6 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  /* Ensures padding is included in height */
 }
 
 .candidate-link {
@@ -120,10 +115,10 @@
   background-color: color-mix(in srgb, var(--primary-accent) 15%, transparent);
   padding: 6px 12px;
   border-radius: 9999px;
-  /* Pill shape */
+
 }
 
-/* Style for the message when no candidates are found */
+
 .virtual-list-empty {
   padding: 2rem;
   text-align: center;

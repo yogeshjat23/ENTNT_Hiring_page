@@ -27,11 +27,8 @@
   font-size: 1.1rem;
 }
 
-/* Re-using loader styles for a consistent feel */
 .loader-container-error {
     margin-top: 2rem;
     display: flex;
     justify-content: center;
 }
-/* You can copy the .spinner-box and its keyframes from your Loader.css
-   or ensure they are globally available */

@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import './CreateAssessmentPage.css';
-import Loader from '../../components/common/Loader'; // For a better loading experience
+import Loader from '../../components/common/Loader'; 
 
-// API call to fetch all jobs for the dropdown
+
 const fetchAllJobs = async () => (await fetch('/jobs/all')).json();
 
 export default function CreateAssessmentPage() {
     const [jobId, setJobId] = useState('');
     const navigate = useNavigate();
 
-    // Fetch all jobs to populate the dropdown
+   
     const { data: jobs = [], isLoading } = useQuery({
         queryKey: ['allJobs'],
         queryFn: fetchAllJobs,

@@ -1,4 +1,4 @@
-/* === MODERN THEMED NOTES MODAL === */
+
 
 .notes-modal-backdrop {
   position: fixed;
@@ -16,7 +16,6 @@
 }
 
 .notes-modal {
-  /* Glassmorphism Effect */
   background: var(--surface-primary);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -107,7 +106,7 @@
   transition: all 0.2s ease;
 }
 
-.notes-actions button:first-child { /* Cancel Button */
+.notes-actions button:first-child { 
   background-color: var(--surface-secondary);
   color: var(--text-secondary);
   border: 1px solid var(--border-color);
@@ -117,7 +116,7 @@
   color: var(--text-primary);
 }
 
-.notes-actions button:last-child { /* Save Button */
+.notes-actions button:last-child { 
   background-color: var(--primary-accent);
   color: white;
   box-shadow: var(--shadow-md);

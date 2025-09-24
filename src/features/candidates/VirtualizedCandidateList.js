@@ -1,4 +1,4 @@
-// src/components/VirtualizedCandidateList.js
+
 import React, { useState, useMemo } from "react";
 import { List, AutoSizer } from "react-virtualized";
 import { FiMail  } from 'react-icons/fi';
@@ -11,7 +11,7 @@ export default function VirtualizedCandidateList({ candidates = [] }) {
   const [search, setSearch] = useState("");
   const [stageFilter, setStageFilter] = useState("");
 
-  // Filter logic
+ 
   const filteredCandidates = useMemo(() => {
     return candidates.filter((c) => {
       const matchesSearch =
@@ -26,7 +26,7 @@ export default function VirtualizedCandidateList({ candidates = [] }) {
     });
   }, [candidates, search, stageFilter]);
 
-  // Row renderer
+ 
   const rowRenderer = ({ key, index, style }) => {
     const candidate = filteredCandidates[index];
     if (!candidate) return null;
@@ -57,7 +57,7 @@ export default function VirtualizedCandidateList({ candidates = [] }) {
 
   return (
     <div className="virtualized-list-wrapper" style={{ width: "100%" }}>
-      {/* === Filter Section === */}
+    
       <div className="filter-section" style={{ marginBottom: "10px" }}>
         <input
           type="text"
@@ -80,7 +80,7 @@ export default function VirtualizedCandidateList({ candidates = [] }) {
         </select>
       </div>
 
-      {/* === Candidate List === */}
+      
       <div className="list-container" style={{ height: "600px", width: "100%" }}>
         {filteredCandidates.length === 0 ? (
           <p>No candidates found.</p>

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import Loader from '../../components/common/Loader';
-import StatCard3D from './StatCard3D'; // Import the new component
+import StatCard3D from './StatCard3D'; 
 import './DashboardPage.css';
 
 // API calls

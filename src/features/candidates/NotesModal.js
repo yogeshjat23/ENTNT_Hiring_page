@@ -1,8 +1,6 @@
-// src/features/candidates/NotesModal.js
+
 import React, { useEffect, useState } from 'react';
 import './NotesModal.css';
-
-// local mentions list (render-only suggestions)
 const MENTIONS = [
   { id: 'u1', name: 'Alice' },
   { id: 'u2', name: 'Bob' },
@@ -29,8 +27,7 @@ export default function NotesModal() {
     return () => window.removeEventListener('openNotesModal', handler);
   }, []);
 
-  // If you have a central store open modal method, wire it here (example omitted)
-  // For simplicity we only handle the window event fallback
+  
 
   const close = () => {
     setOpen(false);
@@ -44,7 +41,7 @@ export default function NotesModal() {
     close();
   };
 
-  // very small @mention parser to show suggestions when user types '@' + text
+
   useEffect(() => {
     const m = notes.match(/@([a-zA-Z0-9_]*)$/);
     if (!m) {

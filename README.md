@@ -141,7 +141,7 @@ Open in browser → https://talentflow-zeta.vercel.app/
 
 Username: hr
 
-Password: password123
+Password: hr123
 
 🌍 Live Demo → TalentFlow on Vercel
 

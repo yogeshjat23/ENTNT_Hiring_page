@@ -31,7 +31,7 @@
   border-radius: 4px;
 }
 
-/* Position each face of the cube in 3D space */
+
 .front  { transform: translateZ(25px); }
 .back   { transform: rotateY(180deg) translateZ(25px); }
 .top    { transform: rotateX(90deg) translateZ(25px); }

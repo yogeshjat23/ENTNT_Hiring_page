@@ -9,7 +9,7 @@ import Pagination from '../../components/common/Pagination';
 import Loader from '../../components/common/Loader';
 import './JobsBoard.css';
 
-// --- API Call Functions ---
+
 const fetchJobs = async (titleFilter, tagFilter, currentPage) => {
     const res = await fetch(`/jobs?search=${titleFilter}&tagSearch=${tagFilter}&page=${currentPage}`);
     if (!res.ok) throw new Error('Network response was not ok');
@@ -218,7 +218,7 @@ const JobsBoard = () => {
             )}   
             
 
-            {/* --- ARCHIVED JOBS SECTION --- */}
+           
             {!isLoading && !isError && archivedJobs.length > 0 && (
                 <div className="jobs-section">
                     <div className="jobs-section-header collapsible" onClick={() => toggleSection('archived')}>

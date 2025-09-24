@@ -9,9 +9,6 @@ import Modal from './components/common/Modal';
 import JobForm from './components/jobs/JobForm';
 import { useJobModalStore } from './store/useJobModalStore'; 
 
-
-// Page Components 
-
 import ErrorBoundary from './components/common/ErrorBoundary';
 import DashboardPage from './features/dashboard/DashboardPage';
 import HomePage from './features/home/HomePage';
@@ -28,15 +25,13 @@ import './App.css';
 
 const queryClient = new QueryClient();
 
-// --- Unified App Layout (Handles both public and private states) ---
 const AppLayout = () => {
   const { user, isLoggedIn, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-   const [isRefreshing, setIsRefreshing] = useState(false); // Add this state
+   const [isRefreshing, setIsRefreshing] = useState(false); 
 
   const handleRefresh = () => {
-    setIsRefreshing(true); // Start animation
-    // Reload the page after a short delay to allow the animation to be seen
+    setIsRefreshing(true);
     setTimeout(() => {
       window.location.reload();
     }, 500);
@@ -93,7 +88,6 @@ const AppLayout = () => {
   );
 };
 
-// --- Main App Component ---
 function App() {
   const theme = useThemeStore((state) => state.theme);
   const { isOpen, jobToEdit, closeModal } = useJobModalStore();
@@ -109,12 +103,11 @@ function App() {
         <ErrorBoundary>
         <AuthProvider>
           <Routes>
-            {/* All pages now use the smart AppLayout */}
+           
             <Route element={<AppLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
-              
-              {/* Protected Routes are nested here */} 
+ 
                 <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/jobs" element={<ProtectedRoute><JobsBoard /></ProtectedRoute>} />
               <Route path="/candidates" element={<ProtectedRoute><CandidatesKanban /></ProtectedRoute>} />
@@ -124,14 +117,12 @@ function App() {
               <Route path="/assessments/:jobId" element={<ProtectedRoute><AssessmentBuilder /></ProtectedRoute>} />
             </Route>
 
-            {/* Top-level modal route also needs protection */}
+          
             <Route path="/jobs/:jobId" element={<ProtectedRoute><JobDetailsModal /></ProtectedRoute>} />
             
-            {/* Fallback for unknown routes */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
-          
-          {/* Create/Edit Job Modal remains at the top level */}
+        
           <Modal isOpen={isOpen} onClose={closeModal} title={jobToEdit ? 'Edit Job' : 'Create New Job'}>
             <JobForm />
           </Modal>
@@ -142,7 +133,6 @@ function App() {
   );
 }
 
-// ProtectedRoute Wrapper (no changes needed)
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useAuth();
   return isLoggedIn ? children : <Navigate to="/login" replace />;

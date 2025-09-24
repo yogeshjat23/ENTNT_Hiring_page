@@ -3,7 +3,6 @@ import { formatISO } from 'date-fns';
 import {faker} from '@faker-js/faker';
  
 
-// This function seeds the database if it's empty.
 export async function seedDatabase() {
   const jobCount = await db.jobs.count();
   if (jobCount > 0) {
@@ -33,20 +32,19 @@ export async function seedDatabase() {
     const stage = stages[i % stages.length];
     const candidateId = `cand-${i + 1}`;
     
-    // Combine a random first and last name
      const firstName = faker.person.firstName();
     const lastName = faker.person.lastName();
     const fullName = `${firstName} ${lastName}`;
 
     candidates.push({
       id: candidateId,
-      name: fullName, // Use the new realistic name
-      email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${i}@example.com`, // Create a matching email
+      name: fullName,
+      email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${i}@example.com`, 
       jobId: `job-${(i % 25) + 1}`,
       stage: stage,
     });
     
-    // Add initial timeline entry
+
     await db.candidateTimeline.add({
         candidateId,
         stage,
@@ -56,7 +54,6 @@ export async function seedDatabase() {
   }
   await db.candidates.bulkAdd(candidates);
 
-  // Seed Assessments
   const assessments = [];
   for (let i = 0; i < 3; i++) {
     assessments.push({
@@ -85,7 +82,7 @@ export async function seedDatabase() {
               type: 'long-text',
               text: 'Tell us about a challenging project.',
               isRequired: false,
-              condition: { questionId: 'q1', value: 'Yes' } // Conditional question
+              condition: { questionId: 'q1', value: 'Yes' } 
             },
           ],
         },

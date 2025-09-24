@@ -68,7 +68,7 @@ const mutationOptions = {
   });
 
   const handleClose = () => {
-    navigate('/jobs'); // Navigate back to the main jobs list
+    navigate('/jobs');
   };
     const handleOpenModal = (job = null) => {
         const handleSubmit = (jobData) => {

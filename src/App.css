@@ -1,8 +1,7 @@
-/* Add some basic styling for layout, fonts, etc. */
-/* 1. Theme Variables */
+
 
 :root {
-  /* DARK MODE (DEFAULT) */
+ 
   --background-primary: #111827;
   --surface-primary: #1F2937;
   --surface-secondary: #374151;
@@ -19,7 +18,7 @@
 }
 
 .light-mode {
-  /* LIGHT MODE OVERRIDES (PRESERVED AS REQUESTED) */
+ 
   --background-primary: #FDFCFB;
   --surface-primary: #F6F3EF;
   --surface-secondary: #EDE8E1;
@@ -32,7 +31,7 @@
   --primary-accent-hover: #a17c5a;
 }
 
-/* Base variables that use the theme */
+
 :root {
   --shadow-sm: 0 1px 2px 0 var(--shadow-color);
   --shadow-md: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
@@ -41,7 +40,7 @@
 }
 
 
-/* 2. Global & Layout Styles */
+
 body {
   background-color: var(--background-primary);
   color: var(--text-primary);
@@ -49,20 +48,18 @@ body {
 }
 
 
-/* === MODERN NAVIGATION BAR STYLES === */
+
 
 nav {
   display: flex;
   align-items: center;
   padding: 1rem 2rem;
-  
-  /* Glassmorphism Effect */
   background-color: var(--surface-primary);
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
   border-bottom: 1px solid var(--border-color);
 
-  position: sticky; /* Makes the nav bar stay at the top on scroll */
+  position: sticky; 
   top: 0;
   z-index: 1000;
   
@@ -74,7 +71,7 @@ nav h1 {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-right: auto; /* Pushes other links to the right */
+  margin-right: auto; 
   transition: color 0.3s ease;
 }
 
@@ -83,25 +80,24 @@ nav a {
   color: var(--text-secondary);
   font-weight: 600;
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem; /* 8px */
+  border-radius: 0.5rem; 
   position: relative;
   overflow: hidden;
   transition: color 0.3s ease, background-color 0.3s ease;
 }
 
-/* Hover effect */
 nav a:hover {
   color: var(--text-primary);
   background-color: var(--surface-secondary);
 }
 
-/* Style for the currently active link */
+
 nav a.active {
   color: var(--primary-accent);
   background-color: color-mix(in srgb, var(--primary-accent) 15%, transparent);
 }
 
-/* Optional: Subtle animated underline for the active link */
+
 nav a.active::after {
   content: '';
   position: absolute;
@@ -132,13 +128,11 @@ main {
     text-decoration: none;  
 }
 
-/* Add other global styles for buttons, modals, etc. */ 
 
-/* === UPGRADED NAVIGATION BAR STYLES === */
 
 nav {
   display: flex;
-  justify-content: space-between; /* This is key for the new layout */
+  justify-content: space-between; 
   align-items: center;
   padding: 0.75rem 2rem;
   background-color: var(--surface-primary);
@@ -162,13 +156,13 @@ nav h1 {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-right: 1.5rem; /* Space between logo and links */
+  margin-right: 1.5rem; 
 }
 
 nav a {
-  display: flex; /* For aligning icon and text */
+  display: flex; 
   align-items: center;
-  gap: 0.5rem; /* Space between icon and text */
+  gap: 0.5rem; 
   text-decoration: none;
   color: var(--text-secondary);
   font-weight: 600;
@@ -187,7 +181,7 @@ nav a.active {
   background-color: color-mix(in srgb, var(--primary-accent) 15%, transparent);
 }
 
-/* --- Profile Dropdown Section --- */
+
 .profile-section {
   position: relative;
 }
@@ -266,7 +260,7 @@ nav a.active {
   color: var(--danger-color);
 }
 
-/* Add this to your App.css file */
+
 
 .login-nav-button {
   display: flex;
@@ -288,7 +282,6 @@ nav a.active {
   box-shadow: var(--shadow-md);
 }
 
-/* Add this to your App.css file */
 
 .nav-action-btn {
   background-color: var(--surface-secondary);
@@ -314,7 +307,7 @@ nav a.active {
     width: 20px;
     height: 20px;
 }
-/* Add this keyframe animation to your App.css */
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -324,7 +317,6 @@ nav a.active {
   }
 }
 
-/* Add this class to style the button during refresh */
 .nav-action-btn.refreshing svg {
   animation: spin 0.5s linear infinite;
 }

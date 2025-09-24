@@ -11,7 +11,7 @@ import './CandidatesKanban.css';
 
 const STAGES = ['applied', 'screen', 'tech', 'offer', 'hired', 'rejected'];
 
-// Mock API call functions
+
 const fetchCandidates = async () => (await fetch('/candidates')).json();
 
 const fetchAllJobs = async () => (await fetch('/jobs/all')).json();
@@ -19,7 +19,7 @@ const moveCandidate = async ({ id, stage, notes }) => {
     const res = await fetch(`/candidates/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stage, notes }), // Pass notes in the body
+        body: JSON.stringify({ stage, notes }), 
     });
     if (!res.ok) throw new Error('Failed to move candidate');
     return res.json();
@@ -44,27 +44,22 @@ const CandidatesKanban = () => {
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['candidates'] }),
     });
 
-    // CORRECTED: Combined filtering and grouping into a single useMemo hook
+   
     const { filteredCandidates, candidatesByStage } = useMemo(() => {
-        // Guard clause to prevent errors when data is loading
-        if (!candidates || !Array.isArray(candidates)) {
+          if (!candidates || !Array.isArray(candidates)) {
             const emptyStages = STAGES.reduce((acc, stage) => ({...acc, [stage]: []}), {});
             return { filteredCandidates: [], candidatesByStage: emptyStages };
         }
 
-        // 1. Filter the candidates based on the search term
         const filtered = candidates.filter(c => {
             const term = searchTerm.toLowerCase();
             return c.name.toLowerCase().includes(term) || c.email.toLowerCase().includes(term);
         });
         
-        // 2. Group the already-filtered candidates into stages for the Kanban view
         const grouped = STAGES.reduce((acc, stage) => ({...acc, [stage]: []}), {});
         filtered.forEach(c => {
             if (grouped[c.stage]) grouped[c.stage].push(c);
         });
-
-        // Return both the flat filtered list (for List View) and the grouped list (for Kanban View)
         return { filteredCandidates: filtered, candidatesByStage: grouped };
     }, [candidates, searchTerm]); 
     
@@ -78,20 +73,20 @@ const CandidatesKanban = () => {
         const candidate = candidates.find(c => c.id === draggableId);
         if (!candidate) return;
 
-        // This is the function the modal will call when "Save" is clicked
+   
         const handleConfirm = (notesFromModal) => {
             moveMutation.mutate({
                 id: draggableId,
                 stage: destination.droppableId,
-                notes: notesFromModal, // Pass the notes to the mutation
+                notes: notesFromModal, 
             });
         };
 
-        // Create and dispatch the custom event to open the modal
+       
         const event = new CustomEvent('openNotesModal', {
             detail: {
-                meta: { name: candidate.name }, // Pass candidate's name to the modal
-                onConfirm: handleConfirm, // Pass the confirm handler
+                meta: { name: candidate.name }, 
+                onConfirm: handleConfirm, 
             }
         });
         window.dispatchEvent(event);
@@ -157,7 +152,7 @@ const CandidatesKanban = () => {
             <Link 
                 to={`/jobs/${c.jobId}`} 
                 className="candidate-job-link"
-                onClick={(e) => e.stopPropagation()} // Prevents the main card link from firing
+                onClick={(e) => e.stopPropagation()} 
             >
                 {jobMap.get(c.jobId)?.title || c.jobId}
             </Link> 

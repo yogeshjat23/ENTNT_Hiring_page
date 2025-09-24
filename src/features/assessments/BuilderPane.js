@@ -5,7 +5,7 @@ import QuestionEditor from './QuestionEditor';
 export default function BuilderPane({ onSave, isSaving }) {
   const { assessment, addSection, addQuestion, updateSectionTitle } = useAssessmentStore();
 
-  // The old loading check is removed from here.
+
 
   return (
     <div className="builder-pane">

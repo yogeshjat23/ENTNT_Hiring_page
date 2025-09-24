@@ -4,7 +4,6 @@ function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-// Helper: random delay + error injection
 const withNetwork = (res, ctx, data, {
   errorRate = 0.1,
   minDelay = 200,
@@ -121,7 +120,7 @@ export const handlers = [
     return withNetwork(res, ctx, { success: true });
   }),
 
-  // === CANDIDATES ===
+  // CANDIDATES
   rest.get('/candidates', async (req, res, ctx) => {
     const allCandidates = await db.candidates.toArray();
     return withNetwork(res, ctx, allCandidates);
@@ -139,15 +138,15 @@ rest.get('/candidates/:id', async (req, res, ctx) => {
   
 rest.patch('/candidates/:id', async (req, res, ctx) => {
     const { id } = req.params;
-    const { stage, notes } = await req.json(); // Get notes from the request body
+    const { stage, notes } = await req.json(); 
     await db.candidates.update(id, { stage });
     
-    // Add the notes to the timeline entry
+   
     await db.candidateTimeline.add({
       candidateId: id,
       stage,
       timestamp: new Date().toISOString(),
-      notes: notes || '' // Save notes or an empty string
+      notes: notes || '' 
     });
 
     const updatedCandidate = await db.candidates.get(id);
@@ -168,7 +167,7 @@ rest.patch('/candidates/:id', async (req, res, ctx) => {
 
   
 
-  // === ASSESSMENTS ===
+  // ASSESSMENTS
 
   rest.get('/assessments', async (req, res, ctx) => {
     const allAssessments = await db.assessments.toArray();

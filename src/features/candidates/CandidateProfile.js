@@ -45,7 +45,7 @@ export default function CandidateProfile() {
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  // CORRECTED: Use a template literal with backticks ``
+
   const color = `hsl(${hash % 360}, 75%, 60%)`;
   return color;
 }; 
@@ -53,7 +53,7 @@ const getInitials = (name = '') => {
   const allNames = name.trim().split(' ');
   const initials = allNames.reduce((acc, curr, index) => {
     if (index === 0 || index === allNames.length - 1) {
-      // CORRECTED: Use proper string concatenation
+    
       acc = `${acc}${curr.charAt(0).toUpperCase()}`;
     }
     return acc;

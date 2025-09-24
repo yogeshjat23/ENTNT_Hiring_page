@@ -1,10 +1,9 @@
-/* === MODERN ASSESSMENT BUILDER STYLES === */
+
 
 .assessment-builder-layout {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
-    /* Adjusted height to be more flexible */
     height: calc(100vh - 150px);
 }
 
@@ -131,7 +130,6 @@
 
 .add-question-controls button,
 .add-section-btn {
-    /* Reusing action-btn style for consistency */
     font-size: 0.875rem;
     font-weight: 600;
     padding: 0.5rem 1rem;
@@ -155,7 +153,7 @@
     margin-top: 1rem;
 }
 
-/* --- Preview Pane Styles --- */
+
 .preview-form fieldset {
     border: none;
     padding: 0;
@@ -186,7 +184,7 @@
 .question-renderer input[type="text"],
 .question-renderer input[type="number"],
 .question-renderer textarea {
-    /* Reusing filter-input styles */
+  
     width: 100%;
     padding: 12px 16px;
     font-size: 1rem;

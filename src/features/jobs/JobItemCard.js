@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 
-// Accept the new isDragging prop
 const JobItemCard = ({ job, index, children, isDragging }) => {
   const cardRef = useRef(null);
 
@@ -8,13 +7,13 @@ const JobItemCard = ({ job, index, children, isDragging }) => {
     const card = cardRef.current;
     if (!card) return;
 
-    // Reset transform style if dragging starts, letting the library take over.
+    
     if (isDragging) {
       card.style.transform = '';
-      return; // Exit the effect early
+      return; 
     }
 
-    // This part now only runs when the card is NOT being dragged
+    
     const handleMouseMove = (e) => {
       const { left, top, width, height } = card.getBoundingClientRect();
       const x = e.clientX - left;
@@ -35,16 +34,15 @@ const JobItemCard = ({ job, index, children, isDragging }) => {
       card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
     };
 
-    // Add event listeners only when not dragging
     card.addEventListener('mousemove', handleMouseMove);
     card.addEventListener('mouseleave', handleMouseLeave);
 
-    // Cleanup function to remove listeners
+    
     return () => {
       card.removeEventListener('mousemove', handleMouseMove);
       card.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [isDragging]); // Re-run this effect whenever the isDragging state changes
+  }, [isDragging]); 
 
   return (
     <div

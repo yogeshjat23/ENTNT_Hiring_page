@@ -21,9 +21,9 @@
   }
 }
 
-/* This is the grid item */
+
 .assessment-grid-item {
-  display: flex; /* This ensures the card inside can stretch to full height */
+  display: flex;
 }
 
 .assessment-card-link {
@@ -56,7 +56,7 @@
   font-size: 1.2rem;
 }
 
-/* Style for the Job ID to be smaller */
+
 .assessment-card h3.job-id {
     color: var(--text-secondary);
     font-size: 0.9rem;

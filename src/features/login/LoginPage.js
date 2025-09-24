@@ -22,6 +22,9 @@ const LoginPage = () => {
       <div className="login-card">
         <h1 className="login-title">TalentFlow</h1>
         <p className="login-subtitle">HR Portal Login</p>
+         <h1 >For testing: </h1>
+          <h1 >Username: hr</h1>
+           <h1>Password: hr123</h1>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <input

@@ -51,7 +51,7 @@ export const useAssessmentStore = create(
         if (section) section.title = title;
     }),
     
-    // Helper to get all questions for conditional logic dropdown
+    
     getAllQuestions: () => {
         return get().assessment.sections.flatMap(s => s.questions);
     }

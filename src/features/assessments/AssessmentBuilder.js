@@ -40,9 +40,7 @@ export default function AssessmentBuilder() {
 
   useEffect(() => {
     if (initialData) {
-        // THIS IS THE FIX:
-        // If the fetched assessment has no sections, it's new.
-        // We create a blank one in the database immediately.
+       
         if (initialData.sections.length === 0) {
             const blankAssessment = { jobId, sections: [] };
             saveMutation.mutate({ jobId, data: blankAssessment });
@@ -51,7 +49,7 @@ export default function AssessmentBuilder() {
             loadAssessment(initialData);
         }
     }
-  }, [initialData, jobId, loadAssessment]); // Added jobId and saveMutation to dependency array
+  }, [initialData, jobId, loadAssessment]); 
 
   const handleSave = () => {
     saveMutation.mutate({ jobId, data: assessment });

@@ -1,9 +1,8 @@
 
-/* Add these new styles to your existing file */
 
 :root {
-  /* ... your other colors ... */
-  --warning-color: #F59E0B; /* A nice amber/yellow */
+  
+  --warning-color: #F59E0B; 
 }
 
 
@@ -90,7 +89,7 @@
 
 .candidate-list {
     flex-grow: 1;
-    min-height: 100px; /* So empty columns are still droppable */
+    min-height: 100px; 
     overflow-y: auto;
     max-height: 70vh;
 }
@@ -127,13 +126,13 @@
   border-left: 3px solid var(--status-active);
 }
 
-/* Style for the "Rejected" column */
+
 .kanban-column[data-stage="rejected"] {
   background-color: color-mix(in srgb, var(--danger-color) 10%, var(--surface-primary));
   border-left: 3px solid var(--danger-color);
 }
 
-/* Style for cards within the "Hired" column */ 
+ 
 .kanban-column[data-stage="applied"] .candidate-card {
   border-left-color: gray;
 } 
@@ -142,13 +141,13 @@
   border-left-color: var(--status-active);
 }
 
-/* Style for cards within the "Rejected" column */
+
 .kanban-column[data-stage="rejected"] .candidate-card {
   border-left-color: var(--danger-color);
   opacity: 0.8;
 }
 
-/* Make the title of hired/rejected columns more prominent */
+
 .kanban-column[data-stage="hired"] h3,
 .kanban-column[data-stage="rejected"] h3 {
     color: var(--text-primary);
@@ -161,17 +160,17 @@
   background-color: color-mix(in srgb, var(--warning-color) 10%, var(--surface-primary));
 }
 
-/* Style for cards within those columns */
+
 .kanban-column:not([data-stage="hired"]):not([data-stage="rejected"]):not([data-stage="applied"]).candidate-card {
   border-left-color: var(--warning-color);
 }
 .kanban-column[data-stage="screen"] h3,
 .kanban-column[data-stage="tech"] h3,
 .kanban-column[data-stage="offer"] h3 {
-  color: var(--text-primary); /* Use theme variable for white */
+  color: var(--text-primary); 
 }
 
-/* In light mode, revert them back to the secondary text color */
+
 .light-mode .kanban-column[data-stage="screen"] h3,
 .light-mode .kanban-column[data-stage="tech"] h3,
 .light-mode .kanban-column[data-stage="offer"] h3 {
@@ -235,7 +234,7 @@
 } 
 
 
-/* Add these styles to your CandidatesKanban.css file */
+
 
 .candidate-job-link-wrapper {
   margin-top: 0.75rem;
@@ -261,10 +260,10 @@
   box-shadow: 0 0 10px 0 color-mix(in srgb, var(--primary-accent) 50%, transparent);
 } 
    
-/* Add this to CandidateProfile.css */
+
 
 .profile-job-link {
-    color: inherit; /* Inherits the --text-primary color from its parent */
+    color: inherit;
     text-decoration: none;
     transition: color 0.2s ease;
 }
@@ -273,7 +272,7 @@
     color: var(--primary-accent);
     text-decoration: underline;
 } 
-/* Add these styles to your CandidateProfile.css file */
+
 
 .send-mail-btn {
   display: inline-flex;
@@ -291,7 +290,7 @@
   text-decoration: none;
   box-shadow: var(--shadow-md);
   transition: all 0.2s ease;
-  margin-top: 1.5rem; /* Space it from the email address */
+  margin-top: 1.5rem; 
 }
 
 .send-mail-btn:hover {
@@ -300,25 +299,25 @@
   transform: translateY(-2px);
 } 
 
-/* Add these styles to your CandidateProfile.css */
+
 
 .timeline-content {
-  position: relative; /* This is required for the pseudo-element to be positioned correctly */
+  position: relative;
   background-color: var(--surface-secondary);
   padding: 1rem;
   border-radius: var(--border-radius);
   flex-grow: 1;
 }
 
-/* This creates the arrow/triangle shape */
+
 .timeline-content::before {
   content: '';
   position: absolute;
   top: 10px;
-  right: 100%; /* Position it to the left of the content box */
+  right: 100%; 
   margin-top: -8px;
   border-width: 8px;
   border-style: solid;
-  /* The border colors create the triangle shape */
+
   border-color: transparent var(--surface-secondary) transparent transparent;
 }

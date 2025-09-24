@@ -23,7 +23,7 @@ export default function FormPreview() {
       e.preventDefault();
       alert('Form submitted! (Responses logged to console)');
       console.log('Candidate Responses:', responses);
-      // Here you would call a mutation to POST to /assessments/:jobId/submit
+     
   }
 
   return (

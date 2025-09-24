@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext(null);
 
-// Mock user data for the HR login
 const MOCK_HR_USER = {
     name: 'HR Manager',
     initials: 'HR',
@@ -11,7 +10,7 @@ const MOCK_HR_USER = {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    // Check if the user is logged in from a previous session
+  
     const isLoggedIn = localStorage.getItem('isLoggedIn');
     return isLoggedIn ? MOCK_HR_USER : null;
   });
@@ -19,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
    const login = (username, password) => {
-    if (username === 'hr' && password === 'password123') {
+    if (username === 'hr' && password === 'hr123') {
       localStorage.setItem('isLoggedIn', 'true');
       setUser(MOCK_HR_USER);
       navigate('/');
@@ -34,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     navigate('/login');
   };
 
-  // The context now provides the user object and a simple isLoggedIn flag
+  
   return (
     <AuthContext.Provider value={{ user, isLoggedIn: !!user, login, logout }}>
       {children}

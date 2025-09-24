@@ -1,8 +1,6 @@
-/* === MODERN THEME WITH ANIMATED BACKGROUNDS & LIGHT/DARK MODES === */
 
-/* 1. Theme Variables */
 :root {
-  /* DARK MODE (DEFAULT) */
+
   --background-primary: #0D1117;
   --surface-primary: rgba(22, 27, 34, 0.75);
   --surface-secondary: rgba(30, 36, 44, 0.8);
@@ -17,7 +15,7 @@
   --status-archived: #FB923C;
   --text-accent: var(--primary-accent);
   
-  /* Base variables that use the theme */
+ 
   --shadow-sm: 0 1px 2px 0 var(--shadow-color);
   --shadow-md: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
   --shadow-lg: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -4px var(--shadow-color);
@@ -25,7 +23,7 @@
 }
 
 .light-mode {
-  /* LIGHT MODE TO MATCH IMAGE */
+
   --background-primary: #FDFCFB;
   --surface-primary: #F6F3EF;
   --surface-secondary: #EDE8E1;
@@ -39,7 +37,7 @@
 }
 
 
-/* 2. Global & Layout Styles */
+
 @keyframes background-pan {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -85,7 +83,7 @@ body {
 }
 
 
-/* 3. Filter Section */
+
 .filters-container {
   display: flex;
   flex-direction: column;
@@ -120,7 +118,7 @@ body {
 }
 
 
-/* 4. Collapsible Sections */
+
 .jobs-section {
   margin-top: 2.5rem;
 }
@@ -164,7 +162,6 @@ body {
 }
 
 
-/* 5. Job List & Items */
 .jobs-list {
   padding-top: 0;
   display: grid;
@@ -192,7 +189,7 @@ body {
 .job-card-link {
   text-decoration: none;
   color: inherit;
-  display: contents; /* Makes link behave correctly in a grid */
+  display: contents; 
 }
 
 .job-item {
@@ -241,7 +238,7 @@ body {
   flex-grow: 1;
 }
 
-/* Glare effect for 3D card */
+
 .job-item::before {
   content: "";
   position: absolute;
@@ -292,10 +289,10 @@ body {
 }
 
 .job-deadline, .job-apply-link {
-    display: none; /* Hide these as they were placeholders */
+    display: none; 
 }
 
-/* 6. Buttons & Actions */
+
 .job-actions {
   display: flex;
   align-items: center;
@@ -371,7 +368,7 @@ body {
 }
 
 
-/* 7. Theme Toggle Button */
+
 .theme-toggle {
   background-color: var(--surface-secondary);
   border: 1px solid var(--border-color);
